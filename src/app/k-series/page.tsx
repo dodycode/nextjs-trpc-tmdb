@@ -1,9 +1,9 @@
 import { PageHeader } from "~/components/page-header";
 import { Filters } from "../_components/filters";
-import { Movies } from "../_components/movies";
 import { SearchInput } from "../_components/search-input";
 
 import { Container } from "~/components/container";
+import { KoreanTVShowList } from "./_components/series";
 
 export default function KSeries() {
   return (
@@ -13,7 +13,7 @@ export default function KSeries() {
         <PageHeader title="K-Series">
           <Filters />
         </PageHeader>
-        <Movies />
+        <KoreanTVShowList />
       </div>
     </Container>
   );
