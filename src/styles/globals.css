@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --disney-hostar-gradient: linear-gradient(
+        180deg,
+        rgba(2, 8, 23, 0) 73.08%,
+        rgba(2, 8, 23, 0.01) 77.84%,
+        rgba(2, 8, 23, 0.05) 79.74%,
+        #020817
+      ),
+      linear-gradient(
+        90deg,
+        #020817,
+        rgba(2, 8, 23, 0.8) 7.31%,
+        rgba(2, 8, 23, 0.52) 15.54%,
+        rgba(2, 8, 23, 0.12) 29.73%,
+        rgba(2, 8, 23, 0) 40.59%
+      );
+
+    --disney-hotstar-sidenav-backdrop: linear-gradient(
+      90.43deg,
+      rgba(2, 8, 23, 0.95) 16.24%,
+      rgba(2, 8, 23, 0) 98.46%
+    );
+
+    --disney-hostar-details-gradient: linear-gradient(
+        178.5deg,
+        rgba(2, 8, 23, 0) 57.9%,
+        rgba(2, 8, 23, 0.01) 64.8%,
+        rgba(2, 8, 23, 0.05) 67.56%,
+        #020817 96.94%
+      ),
+      linear-gradient(
+        90deg,
+        #020817,
+        rgba(2, 8, 23, 0.85) 16.15%,
+        rgba(2, 8, 23, 0.73) 25.52%,
+        rgba(2, 8, 23, 0.6) 32.81%,
+        rgba(2, 8, 23, 0.05) 52.08%,
+        rgba(2, 8, 23, 0) 65.1%
+      );
+
+    --disney-hotstar-details-bottom-gradient: linear-gradient(
+      180deg,
+      rgba(2, 8, 23, 0),
+      #020817
+    );
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  .bg-disney-gradient {
+    background: var(--disney-hostar-gradient);
+  }
+  .bg-disney-sidenav-backdrop {
+    background: var(--disney-hotstar-sidenav-backdrop);
+    @apply absolute left-0 z-20 h-screen w-0 transform opacity-0 transition-all duration-300 ease-in-out;
+    @apply group-hover:w-[30vw] group-hover:opacity-100;
+  }
+  .bg-disney-details-gradient {
+    background: var(--disney-hostar-details-gradient);
+    @apply absolute left-0 top-0 h-full w-full;
+  }
+  .bg-disney-details-bottom-gradient {
+    background: var(--disney-hotstar-details-bottom-gradient);
+    @apply absolute inset-x-0 bottom-0 h-1/4 w-full;
+  }
+  .bg-disney-secondary {
+    background-color: #e1e6f0;
+  }
+}
