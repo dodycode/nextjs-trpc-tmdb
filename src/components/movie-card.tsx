@@ -5,9 +5,15 @@ interface MovieCardProps {
   src: StaticImageData;
   alt: string;
   className?: string;
+  imgClassName?: string;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ src, alt, className }) => {
+const MovieCard: React.FC<MovieCardProps> = ({
+  src,
+  alt,
+  className,
+  imgClassName,
+}) => {
   return (
     <div
       className={cn(
@@ -18,9 +24,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ src, alt, className }) => {
       <Image
         src={src}
         alt={alt}
-        objectFit="cover"
-        objectPosition="top center"
-        className="transition-all duration-300 ease-in-out group-hover:scale-110"
+        className={cn(
+          "object-cover object-center transition-all duration-300 ease-in-out group-hover:scale-110",
+          imgClassName,
+        )}
         placeholder="blur"
         fill
       />

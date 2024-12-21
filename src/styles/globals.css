@@ -74,6 +74,15 @@
       rgba(2, 8, 23, 0),
       #020817
     );
+
+    --disney-hostar-actor-details-gradient: linear-gradient(
+      180deg,
+      #081734,
+      #0d1628 73px,
+      #0e1420 168px,
+      #020817 256px,
+      #020817
+    );
   }
 
   .dark {
@@ -129,5 +138,9 @@
   }
   .bg-disney-secondary {
     background-color: #e1e6f0;
+  }
+  .bg-disney-actor-details-gradient {
+    background: var(--disney-hostar-actor-details-gradient);
+    @apply h-full w-full;
   }
 }
