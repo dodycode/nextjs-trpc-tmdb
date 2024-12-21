@@ -1,6 +1,6 @@
 import { PageHeader } from "~/components/page-header";
 import { Filters } from "./_components/filters";
-import { Movies } from "./_components/movies";
+import { DiscoverShows } from "./_components/discover-shows";
 import { SearchInput } from "./_components/search-input";
 import { Container } from "~/components/container";
 
@@ -12,7 +12,7 @@ export default function Home() {
         <PageHeader title="Discover">
           <Filters />
         </PageHeader>
-        <Movies />
+        <DiscoverShows />
       </div>
     </Container>
   );
