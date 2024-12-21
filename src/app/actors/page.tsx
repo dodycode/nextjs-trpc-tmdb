@@ -1,8 +1,8 @@
 import { PageHeader } from "~/components/page-header";
 import { SearchInput } from "../_components/search-input";
+import { Alert, AlertDescription } from "~/components/ui/alert";
 
 import { Container } from "~/components/container";
-import { Actors } from "./_components/actors";
 
 export default function ActorsPage() {
   return (
@@ -10,7 +10,9 @@ export default function ActorsPage() {
       <SearchInput />
       <div className="flex flex-col gap-6">
         <PageHeader title="Actors" />
-        <Actors />
+        <Alert className="bg-secondary text-secondary-foreground">
+          <AlertDescription className="text-lg">Coming Soon!</AlertDescription>
+        </Alert>
       </div>
     </Container>
   );

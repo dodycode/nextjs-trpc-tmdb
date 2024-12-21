@@ -3,10 +3,8 @@ import { z } from "zod";
 const MovieResult = z.object({
   id: z.number(),
   title: z.string(),
-  poster_path: z.string(),
-  posterImage: z.string(),
+  poster_path: z.string().nullable(),
   backdrop_path: z.string().nullable(),
-  backdropImage: z.string(),
   release_date: z.string(),
   overview: z.string(),
   vote_average: z.number(),

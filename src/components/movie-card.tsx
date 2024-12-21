@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useMemo } from "react";
 import { cn } from "~/lib/utils";
 
 interface MovieCardProps {
@@ -16,6 +17,14 @@ const MovieCard: React.FC<MovieCardProps> = ({
   className,
   imgClassName,
 }) => {
+  const posterPath = useMemo(() => {
+    if (!src) {
+      return "https://placehold.co/187x280.png?text=No+Image";
+    }
+
+    return `${baseURL}${src}`;
+  }, [src]);
+
   return (
     <div
       className={cn(
@@ -24,7 +33,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
       )}
     >
       <Image
-        src={`${baseURL}${src}`}
+        src={posterPath}
         alt={alt}
         className={cn(
           "object-cover object-center transition-all duration-300 ease-in-out group-hover:scale-110",

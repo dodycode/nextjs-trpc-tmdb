@@ -23,15 +23,21 @@ export const tmdbAPI = async (endpointURL: string) => {
   return response;
 };
 
-export const defaultFilter = (strParams: string[]) => {
+export const defaultFilter = (strParams: string[], movie?: boolean) => {
   strParams.push(`language=en-US`);
   strParams.push(`include_adult=false`);
-  strParams.push(`include_null_first_air_dates=false`);
   strParams.push(`with_original_language=ko`);
 
-  //get shows that aired in the last 5 years
-  const date5YearsAgo = dayjs().subtract(5, "year").format("YYYY-MM-DD");
-  strParams.push(`first_air_date.gte=${date5YearsAgo}`);
+  if (!movie) {
+    //get shows that aired in the last 5 years
+    const date5YearsAgo = dayjs().subtract(5, "year").format("YYYY-MM-DD");
+    strParams.push(`first_air_date.gte=${date5YearsAgo}`);
+    strParams.push(`include_null_first_air_dates=false`);
+  }
+
+  if (movie) {
+    strParams.push(`include_video=true`);
+  }
 
   return strParams;
 };

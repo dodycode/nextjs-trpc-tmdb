@@ -29,3 +29,41 @@ export const TVShowsSortByEnum = {
 } as const;
 export type TVShowsSortByEnum =
   (typeof TVShowsSortByEnum)[keyof typeof TVShowsSortByEnum];
+
+export const MovieSortByEnum = {
+  popularityDesc: "popularity.desc",
+  popularityAsc: "popularity.asc",
+  voteCountDesc: "vote_count.desc",
+  voteCountAsc: "vote_count.asc",
+  revenueDesc: "revenue.desc",
+  revenueAsc: "revenue.asc",
+  releaseDateDesc: "primary_release_date.desc",
+  releaseDateAsc: "primary_release_date.asc",
+} as const;
+export type MovieSortByEnum =
+  (typeof MovieSortByEnum)[keyof typeof MovieSortByEnum];
+
+export const MovieGenresEnum = {
+  Action: 28,
+  Adventure: 12,
+  Animation: 16,
+  Comedy: 35,
+  Crime: 80,
+  Documentary: 99,
+  Drama: 18,
+  Family: 10751,
+  Fantasy: 14,
+  History: 36,
+  Horror: 27,
+  Music: 10402,
+  Mystery: 9648,
+  Romance: 10749,
+  "Science Fiction": 878,
+  "TV Movie": 10770,
+  Thriller: 53,
+  War: 10752,
+  Western: 37,
+} as const;
+
+export type MovieGenresEnum =
+  (typeof MovieGenresEnum)[keyof typeof MovieGenresEnum];

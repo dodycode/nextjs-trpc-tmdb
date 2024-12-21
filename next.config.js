@@ -14,6 +14,12 @@ const config = {
         port: "",
         pathname: "/t/p/**",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
