@@ -26,7 +26,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={cn("dark font-sans", inter.variable)}>
-      <body className="relative flex items-stretch">
+      <body className="relative flex items-stretch pb-10">
         <TRPCReactProvider>
           <NextTopLoader color="#fff" showSpinner={false} />
           <Sider />
