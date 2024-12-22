@@ -1,5 +1,4 @@
 import { env } from "~/env";
-import dayjs from "./dayjs";
 
 // TMDB API v3
 // I'm not using v4 yet because it's still not stable
@@ -27,13 +26,6 @@ export const defaultFilter = (strParams: string[], movie?: boolean) => {
   strParams.push(`language=en-US`);
   strParams.push(`include_adult=false`);
   strParams.push(`with_original_language=ko`);
-
-  // if (!movie) {
-  //   //get shows that aired in the last 5 years
-  //   const date5YearsAgo = dayjs().subtract(5, "year").format("YYYY-MM-DD");
-  //   strParams.push(`first_air_date.gte=${date5YearsAgo}`);
-  //   strParams.push(`include_null_first_air_dates=false`);
-  // }
 
   if (movie) {
     strParams.push(`include_video=true`);
