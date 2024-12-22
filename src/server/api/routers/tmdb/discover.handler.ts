@@ -19,7 +19,7 @@ export const discoverHandler = publicProcedure
     const genresEnum =
       input?.type === "movie" ? MovieGenresEnum : TVShowsGenresEnum;
 
-    const page = input?.page ?? 1;
+    const page = input?.cursor ?? 1;
     const sortBy = input?.sortBy ?? sortByEnum.popularityDesc;
     const genres = input?.genres ?? [];
 

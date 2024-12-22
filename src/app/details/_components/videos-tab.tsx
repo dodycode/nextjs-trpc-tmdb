@@ -11,7 +11,7 @@ const DetailsVideos: React.FC<DetailsTabsProps> = ({ type, id }) => {
   const { movieVideos, isLoadingMovieVideos } = useMovieVideos(id, type);
 
   const videos = useMemo(() => {
-    if (movieVideos?.results.length && !isLoadingMovieVideos) {
+    if (movieVideos?.results?.length && !isLoadingMovieVideos) {
       const filteredResults = movieVideos.results.filter(
         (result) => !result.name.includes("[Dubbed]"),
       );

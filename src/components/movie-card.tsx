@@ -39,7 +39,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
           "object-cover object-center transition-all duration-300 ease-in-out group-hover:scale-110",
           imgClassName,
         )}
-        quality={100}
+        quality={85}
         sizes="(max-width: 768px) 167px, (max-width: 1024px) 215px, 200px"
         fill
       />

@@ -1,47 +1,48 @@
 "use client";
 
-import {
-  MovieGenresEnum,
-  TVShowsGenresEnum,
-} from "~/server/api/routers/tmdb/lib/enum";
+import { useCallback, useEffect } from "react";
 import { api } from "~/trpc/react";
 
 export default function useDiscoverMovies(type: "movie" | "tv") {
+  // Infinite Scroll
   const {
     data: movies,
     isPending,
     isFetching,
-  } = api.tmdb.discover.useQuery(
+    hasNextPage,
+    fetchNextPage,
+  } = api.tmdb.discover.useInfiniteQuery(
     { type },
     {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      select: (data) => {
-        const mappedResults = data.results?.map((result) => {
-          return {
-            ...result,
-            // Get the genre names
-            genres: result.genre_ids?.map((id) => {
-              const enums =
-                type === "movie" ? MovieGenresEnum : TVShowsGenresEnum;
-              const getKey = Object.entries(enums).find(
-                ([_, value]) => value === id,
-              );
-              if (!getKey?.[0]) return null;
-              return getKey?.[0];
-            }),
-          };
-        });
-
-        return {
-          ...data,
-          results: mappedResults,
-        };
+      getNextPageParam: (lastPage) => {
+        if (lastPage.page < lastPage.total_pages) {
+          return lastPage.page + 1;
+        }
+        return null;
       },
+      enabled: !!type,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     },
   );
 
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 200
+    ) {
+      if (hasNextPage && !isFetching) {
+        void fetchNextPage();
+      }
+    }
+  }, [hasNextPage, isFetching, fetchNextPage]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
   const isLoading = isPending || isFetching;
 
-  return { movies, isLoading };
+  return { movies, isLoading, hasNextPage, fetchNextPage };
 }

@@ -23,7 +23,7 @@ const JumbotronTrailerModal: React.FC<JumbotronProps> = ({ id, type }) => {
   const { movieVideos, isLoadingMovieVideos } = useMovieVideos(id, type);
 
   const videoURL = useMemo(() => {
-    if (movieVideos?.results.length && !isLoadingMovieVideos) {
+    if (movieVideos?.results?.length && !isLoadingMovieVideos) {
       // remove dubbed trailer
       const filteredResults = movieVideos.results.filter(
         (result) => !result.name.includes("[Dubbed]"),
