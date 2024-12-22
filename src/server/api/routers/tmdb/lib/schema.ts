@@ -1,36 +1,24 @@
 import { z } from "zod";
 
-const MovieResult = z.object({
-  id: z.number(),
-  title: z.string(),
-  poster_path: z.string().nullable(),
-  backdrop_path: z.string().nullable(),
-  release_date: z.string(),
-  overview: z.string(),
-  vote_average: z.number(),
-  vote_count: z.number(),
-  popularity: z.number(),
-  original_language: z.string(),
-  original_title: z.string(),
-  genre_ids: z.array(z.number()),
-  video: z.boolean(),
-  adult: z.boolean(),
-});
-
-const TVShowResult = z.object({
-  id: z.number(),
-  name: z.string(),
-  poster_path: z.string().nullable(),
-  backdrop_path: z.string().nullable(),
-  overview: z.string(),
-  first_air_date: z.string(),
-  vote_average: z.number(),
-  vote_count: z.number(),
-  popularity: z.number(),
-  original_language: z.string(),
-  original_name: z.string(),
-  genre_ids: z.array(z.number()),
-  origin_country: z.array(z.string()),
+const MediaResult = z.object({
+  id: z.number().optional().nullable(),
+  title: z.string().optional().nullable(),
+  name: z.string().optional().nullable(),
+  poster_path: z.string().optional().nullable(),
+  backdrop_path: z.string().optional().nullable(),
+  release_date: z.string().optional().nullable(),
+  first_air_date: z.string().optional().nullable(),
+  overview: z.string().optional().nullable(),
+  vote_average: z.number().optional().nullable(),
+  vote_count: z.number().optional().nullable(),
+  popularity: z.number().optional().nullable(),
+  original_language: z.string().optional().nullable(),
+  original_title: z.string().optional().nullable(),
+  original_name: z.string().optional().nullable(),
+  genre_ids: z.array(z.number()).optional().nullable(),
+  video: z.boolean().optional().nullable(),
+  adult: z.boolean().optional().nullable(),
+  origin_country: z.array(z.string()).optional().nullable(),
 });
 
 const imageResult = z.object({
@@ -189,16 +177,9 @@ const seasonResult = z.object({
   vote_average: z.number().default(0),
 });
 
-export const DiscoverTVResponse = z.object({
+export const DiscoverResponse = z.object({
   page: z.number(),
-  results: z.array(TVShowResult),
-  total_results: z.number(),
-  total_pages: z.number(),
-});
-
-export const DiscoverMovieResponse = z.object({
-  page: z.number(),
-  results: z.array(MovieResult),
+  results: z.array(MediaResult),
   total_results: z.number(),
   total_pages: z.number(),
 });
