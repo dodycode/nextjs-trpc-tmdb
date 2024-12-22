@@ -7,7 +7,9 @@ export const movieVideosHandler = publicProcedure
   .output(MovieVideosResponse)
   .input(MovieVideosSchema)
   .query(async ({ input }) => {
-    const response = await tmdbAPI(`/movie/${input.movie_id}/videos`);
+    const response = await tmdbAPI(
+      `/${input.type ? input.type : "movie"}/${input.movie_id}/videos`,
+    );
     const responseJson = (await response.json()) as typeof MovieVideosResponse;
 
     // Parse and validate the response so the typescript happy

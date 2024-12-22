@@ -11,34 +11,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { api } from "~/trpc/react";
 import type { JumbotronProps } from "./jumbotron";
 
 import { generateVideoEmbedUrl } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
+import useMovieVideos from "~/hooks/use-movie-videos";
 
 const JumbotronTrailerModal: React.FC<JumbotronProps> = ({ id, type }) => {
   const isMobile = useIsMobile();
-  const utils = api.useUtils();
+
+  const { movieVideos, isLoadingMovieVideos } = useMovieVideos(id, type);
 
   const videoURL = useMemo(() => {
-    if (type === "movie") {
-      const movieVideos = utils.tmdb.movieVideos.getData({ movie_id: id });
-      if (movieVideos?.results.length) {
-        // remove dubbed trailer
-        const filteredResults = movieVideos.results.filter(
-          (result) => !result.name.includes("[Dubbed]"),
-        );
+    if (movieVideos?.results.length && !isLoadingMovieVideos) {
+      // remove dubbed trailer
+      const filteredResults = movieVideos.results.filter(
+        (result) => !result.name.includes("[Dubbed]"),
+      );
 
-        const firstVideo = filteredResults[0];
-        if (!firstVideo) return "";
+      const firstVideo = filteredResults[0];
+      if (!firstVideo) return "";
 
-        return generateVideoEmbedUrl(firstVideo.site, firstVideo.key) ?? "";
-      }
+      return generateVideoEmbedUrl(firstVideo.site, firstVideo.key) ?? "";
     }
 
     return "";
-  }, [type, id, utils.tmdb.movieVideos]);
+  }, [movieVideos, isLoadingMovieVideos]);
 
   return (
     <Dialog>
