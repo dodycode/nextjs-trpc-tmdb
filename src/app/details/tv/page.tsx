@@ -1,8 +1,8 @@
 import { Container } from "~/components/container";
-import { Jumbotron } from "./_components/jumbotron";
-import { DetailsTabs } from "./_components/tabs";
+import { Jumbotron } from "../_components/jumbotron";
+import { DetailsTabs } from "../_components/tabs";
 
-export default function Movie() {
+export default function TV() {
   return (
     <Container className="flex flex-col gap-20 px-0 lg:px-0 lg:pl-20">
       <Jumbotron />
