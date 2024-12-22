@@ -7,7 +7,7 @@ import type { DetailsTabsProps } from "./tabs";
 import { api } from "~/trpc/react";
 import { useMemo } from "react";
 
-const baseURL = "https://image.tmdb.org/t/p/w300";
+const baseURL = "https://image.tmdb.org/t/p/w200";
 
 const Cast: React.FC<{
   alt: string;

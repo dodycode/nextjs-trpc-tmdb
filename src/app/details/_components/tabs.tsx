@@ -24,7 +24,7 @@ const DetailsTabs: React.FC<DetailsTabsProps> = ({ type, id }) => {
         </TabsList>
         <DetailsCasts type={type} id={id} />
         <DetailsVideos type={type} id={id} />
-        <DetailsImages />
+        <DetailsImages type={type} id={id} />
       </Tabs>
     </div>
   );

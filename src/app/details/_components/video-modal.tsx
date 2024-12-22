@@ -1,8 +1,6 @@
 "use client";
 import ReactPlayer from "react-player/lazy";
 
-import { Icon } from "~/components/icons";
-import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
