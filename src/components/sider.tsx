@@ -8,8 +8,6 @@ import { navItems } from "~/config/nav";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { cn } from "~/lib/utils";
 
-import Logo from "~/app/_assets/logo.png";
-
 export function Sider() {
   const pathname = usePathname();
   const isMobile = useIsMobile();
@@ -44,9 +42,11 @@ export function Sider() {
     >
       {!isMobile && (
         <Image
-          src={Logo}
+          src="/logo.png"
           alt="Dodycode Logo"
           className="absolute top-5 z-50 scale-75 brightness-0 invert"
+          width={100}
+          height={100}
         />
       )}
       {!isMobile && <div className="bg-disney-sidenav-backdrop" />}
