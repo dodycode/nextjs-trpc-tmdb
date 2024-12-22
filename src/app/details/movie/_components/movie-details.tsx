@@ -3,7 +3,7 @@
 import { api } from "~/trpc/react";
 import { DetailsTabs } from "../../_components/tabs";
 import { MovieJumbotron } from "./movie-jumbotron";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export type MovieDetailsProp = {
   movieId: number;
@@ -22,11 +22,27 @@ const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
     },
   );
 
+  const { isFetching: isFetchingCredits, isPending: isPendingCredits } =
+    api.tmdb.movieCredits.useQuery(
+      { movie_id: movieId },
+      {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        enabled: !!movieId,
+      },
+    );
+
   const resetMovieDetails = async () => {
     // destroy the query states whenever the movieId changes
     await utils.tmdb.movieDetails.invalidate();
     await utils.tmdb.movieImages.invalidate();
+    await utils.tmdb.movieCredits.invalidate();
+    await utils.tmdb.movieVideos.invalidate();
   };
+
+  const isLoading = useMemo(() => {
+    return isFetching || isPending || isFetchingCredits || isPendingCredits;
+  }, [isFetching, isPending, isFetchingCredits, isPendingCredits]);
 
   useEffect(() => {
     if (!movieId) return;
@@ -36,14 +52,14 @@ const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
   }, [movieId]);
 
   // Todo: Design the skeleton UI
-  if (isFetching || isPending) {
+  if (isLoading) {
     return <div>Getting movie details...</div>;
   }
 
   return (
     <>
       <MovieJumbotron movieId={movieId} />
-      <DetailsTabs />
+      <DetailsTabs type="movie" id={movieId} />
     </>
   );
 };

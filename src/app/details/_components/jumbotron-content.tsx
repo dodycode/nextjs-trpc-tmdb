@@ -66,7 +66,7 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
       </div>
       <span className="font-bold">{content.genres}</span>
       <div className="flex items-stretch gap-4">
-        <JumbotronTrailerModal id={id} />
+        <JumbotronTrailerModal id={id} type={type} />
         <Button variant="secondary" className="size-14 flex-none">
           <Icon type="plus" />
         </Button>
