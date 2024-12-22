@@ -101,15 +101,17 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
 
   return (
     <div className="relative h-dvh w-full overflow-hidden">
-      <Image
-        ref={bgImageRef}
-        src={`${baseURL}${content.backdropPath}`}
-        alt={`${content.title} backdrop`}
-        className="object-cover object-center"
-        quality={100}
-        fill
-        sizes="100vw"
-      />
+      {content.backdropPath && (
+        <Image
+          ref={bgImageRef}
+          src={`${baseURL}${content.backdropPath}`}
+          alt={`${content.title} backdrop`}
+          className="object-cover object-center"
+          quality={100}
+          fill
+          sizes="100vw"
+        />
+      )}
       <Backdrop />
       <JumbotronContent type={type} id={id} />
     </div>

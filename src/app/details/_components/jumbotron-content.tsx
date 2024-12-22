@@ -9,6 +9,12 @@ import type { JumbotronProps } from "./jumbotron";
 import { JumbotronTrailerModal } from "./jumbotron-trailer-modal";
 import useMovieImages from "~/hooks/use-movie-images";
 import useMovieDetails from "~/hooks/use-movie-details";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 
 const logobaseURL = "https://image.tmdb.org/t/p/w300";
 
@@ -50,14 +56,28 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
 
   return (
     <div className="relative flex h-full w-full flex-col justify-end gap-4 px-4 pb-10 lg:max-w-[30vw]">
-      <Image
-        src={`${logobaseURL}${content.logoPath}`}
-        alt={content.title}
-        width={300}
-        height={100}
-        quality={100}
-        sizes="(max-width: 768px) 300px, (max-width: 1024px) 300px, 300px"
-      />
+      {content.logoPath ? (
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger>
+              <Image
+                src={`${logobaseURL}${content.logoPath}`}
+                alt={content.title}
+                width={300}
+                height={100}
+                quality={100}
+                sizes="(max-width: 768px) 300px, (max-width: 1024px) 300px, 300px"
+              />
+            </TooltipTrigger>
+            <TooltipContent className="text-lg font-bold">
+              {content.title}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ) : (
+        <h1 className="text-3xl font-bold">{content.title}</h1>
+      )}
+
       <JumbotronMetadata type={type} id={id} />
       <div className="min-h-6">
         <p>{content.overview}</p>

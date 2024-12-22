@@ -1,11 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import { TabsContent } from "~/components/ui/tabs";
 
 import NextAvatar from "~/components/next-avatar";
 import type { DetailsTabsProps } from "./tabs";
-import { api } from "~/trpc/react";
-import { useMemo } from "react";
+
+import useMovieCredits from "~/hooks/use-movie-credits";
 
 const baseURL = "https://image.tmdb.org/t/p/w200";
 
@@ -41,35 +42,29 @@ const Cast: React.FC<{
 };
 
 const DetailsCasts: React.FC<DetailsTabsProps> = ({ type, id }) => {
-  const utils = api.useUtils();
+  const { movieCredits, isLoadingMovieCredits } = useMovieCredits(id, type);
 
   const cast = useMemo(() => {
-    if (type === "movie") {
-      const movieCredits = utils.tmdb.movieCredits.getData({ movie_id: id });
-      if (!movieCredits) return [];
+    if (!movieCredits || isLoadingMovieCredits) return [];
 
-      // We only show crew that have profile image
-      const filteredCrew = movieCredits.crew.filter(
-        (crew) => crew.profile_path,
-      );
+    // We only show crew that have profile image
+    const filteredCrew = movieCredits.crew.filter((crew) => crew.profile_path);
 
-      // remove duplicate
-      const uniqueCrew = filteredCrew.filter(
-        (crew, index, self) =>
-          index ===
-          self.findIndex((c) => c.original_name === crew.original_name),
-      );
+    // remove duplicate
+    const uniqueCrew = filteredCrew.filter(
+      (crew, index, self) =>
+        index === self.findIndex((c) => c.original_name === crew.original_name),
+    );
 
-      const cast = [...movieCredits.cast, ...uniqueCrew];
+    const cast = [...movieCredits.cast, ...uniqueCrew];
 
-      return cast;
-    }
-    return [];
-  }, [type, id, utils.tmdb.movieCredits]);
+    return cast;
+  }, [movieCredits, isLoadingMovieCredits]);
 
   return (
     <TabsContent value="casts">
       <div className="flex flex-wrap items-center justify-center gap-10 py-8 lg:justify-start">
+        {isLoadingMovieCredits && "Loading..."}
         {cast.map((cast, idx) => (
           <Cast
             key={idx}
