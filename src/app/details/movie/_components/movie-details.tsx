@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
+
 import { api } from "~/trpc/react";
 import { DetailsTabs } from "../../_components/tabs";
-import { MovieJumbotron } from "./movie-jumbotron";
-import { useEffect, useMemo } from "react";
+import { Jumbotron } from "../../_components/jumbotron";
 
 export type MovieDetailsProp = {
   movieId: number;
@@ -32,6 +33,29 @@ const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
       },
     );
 
+  const { isFetching: isFetchingImages, isPending: isPendingFetchingImages } =
+    api.tmdb.movieImages.useQuery(
+      {
+        movie_id: movieId,
+      },
+      {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+      },
+    );
+
+  const { isFetching: isFetchingVideo, isPending: isPendingFetchingVideo } =
+    api.tmdb.movieVideos.useQuery(
+      {
+        movie_id: movieId,
+      },
+      {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        enabled: !!movieId,
+      },
+    );
+
   const resetMovieDetails = async () => {
     // destroy the query states whenever the movieId changes
     await utils.tmdb.movieDetails.invalidate();
@@ -41,8 +65,26 @@ const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
   };
 
   const isLoading = useMemo(() => {
-    return isFetching || isPending || isFetchingCredits || isPendingCredits;
-  }, [isFetching, isPending, isFetchingCredits, isPendingCredits]);
+    return (
+      isFetching ||
+      isPending ||
+      isFetchingCredits ||
+      isPendingCredits ||
+      isFetchingImages ||
+      isPendingFetchingImages ||
+      isFetchingVideo ||
+      isPendingFetchingVideo
+    );
+  }, [
+    isFetching,
+    isPending,
+    isFetchingCredits,
+    isPendingCredits,
+    isFetchingImages,
+    isPendingFetchingImages,
+    isFetchingVideo,
+    isPendingFetchingVideo,
+  ]);
 
   useEffect(() => {
     if (!movieId) return;
@@ -58,7 +100,7 @@ const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
 
   return (
     <>
-      <MovieJumbotron movieId={movieId} />
+      <Jumbotron type="movie" id={movieId} />
       <DetailsTabs type="movie" id={movieId} />
     </>
   );

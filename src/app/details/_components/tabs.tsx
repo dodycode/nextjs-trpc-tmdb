@@ -11,7 +11,7 @@ const DetailsTabs: React.FC<DetailsTabsProps> = ({ type, id }) => {
   return (
     <div className="pb-8">
       <Tabs defaultValue="casts" className="w-full">
-        <TabsList className="mb-6 h-14 w-full items-start justify-center gap-14 rounded-none border-b bg-transparent p-0 lg:justify-start">
+        <TabsList className="mb-6 h-14 w-full items-start justify-evenly rounded-none border-b bg-transparent p-0 lg:justify-start lg:gap-14">
           <TabsTrigger className="bg-transparent p-0 text-xl" value="casts">
             Cast & Crew
           </TabsTrigger>
@@ -23,7 +23,7 @@ const DetailsTabs: React.FC<DetailsTabsProps> = ({ type, id }) => {
           </TabsTrigger>
         </TabsList>
         <DetailsCasts type={type} id={id} />
-        <DetailsVideos />
+        <DetailsVideos type={type} id={id} />
         <DetailsImages />
       </Tabs>
     </div>

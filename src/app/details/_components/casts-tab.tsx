@@ -53,7 +53,14 @@ const DetailsCasts: React.FC<DetailsTabsProps> = ({ type, id }) => {
         (crew) => crew.profile_path,
       );
 
-      const cast = [...movieCredits.cast, ...filteredCrew];
+      // remove duplicate
+      const uniqueCrew = filteredCrew.filter(
+        (crew, index, self) =>
+          index ===
+          self.findIndex((c) => c.original_name === crew.original_name),
+      );
+
+      const cast = [...movieCredits.cast, ...uniqueCrew];
 
       return cast;
     }
@@ -63,9 +70,9 @@ const DetailsCasts: React.FC<DetailsTabsProps> = ({ type, id }) => {
   return (
     <TabsContent value="casts">
       <div className="flex flex-wrap items-center justify-center gap-10 py-8 lg:justify-start">
-        {cast.map((cast) => (
+        {cast.map((cast, idx) => (
           <Cast
-            key={cast.id}
+            key={idx}
             alt={cast.original_name}
             name={cast.name}
             src={cast.profile_path ?? ""}
