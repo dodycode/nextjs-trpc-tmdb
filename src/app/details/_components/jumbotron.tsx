@@ -32,34 +32,38 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
 
   // change background image opacity on scroll
   useEffect(() => {
-    if (!bgImageRef.current) return;
+    if (isLoadingMovieImages) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const elem = entry.target as HTMLImageElement;
-          if (elem) {
-            // Get the original intersection ratio
-            const originalRatio = entry.intersectionRatio;
+    setTimeout(() => {
+      if (!bgImageRef.current) return;
 
-            // Apply a more aggressive function to decrease the ratio quickly
-            const adjustedRatio = Math.pow(originalRatio, 3);
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const elem = entry.target as HTMLImageElement;
+            if (elem) {
+              // Get the original intersection ratio
+              const originalRatio = entry.intersectionRatio;
 
-            // Set the opacity using the adjusted ratio
-            elem.style.opacity = adjustedRatio.toString();
-          }
-        });
-      },
-      {
-        root: null,
-        threshold: buildThresholdList(),
-      },
-    );
+              // Apply a more aggressive function to decrease the ratio quickly
+              const adjustedRatio = Math.pow(originalRatio, 3);
 
-    observer.observe(bgImageRef.current);
+              // Set the opacity using the adjusted ratio
+              elem.style.opacity = adjustedRatio.toString();
+            }
+          });
+        },
+        {
+          root: null,
+          threshold: buildThresholdList(),
+        },
+      );
 
-    return () => observer.disconnect();
-  }, []);
+      observer.observe(bgImageRef.current);
+
+      return () => observer.disconnect();
+    }, 1000);
+  }, [isLoadingMovieImages]);
 
   const content = useMemo(() => {
     let backdropPath = "";
