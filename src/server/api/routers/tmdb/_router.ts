@@ -5,8 +5,12 @@ import { movieCreditsHandler } from "./movieCredits.handler";
 import { movieDetailsHeandler } from "./movieDetails.handler";
 import { movieImagesHandler } from "./movieImages.handler";
 import { movieVideosHandler } from "./movieVideos.handler";
+import { tvShowCreditsHandler } from "./tvShowCredits.handler";
+import { tvShowDetailsHandler } from "./tvShowDetails.handler";
+import { tvShowImagesHandler } from "./tvShowImages.handler";
+import { tvShowVideosHandler } from "./tvShowVideos.handler";
 
-// Todo: Movie, TV Details and Search
+// Todo: Refactor this to prevent redundancy
 export const tmdbRouter = createTRPCRouter({
   discoverTVShows: discoverHandler,
   discoverMovie: discoverMovieHandler,
@@ -16,4 +20,10 @@ export const tmdbRouter = createTRPCRouter({
   movieDetails: movieDetailsHeandler,
   movieImages: movieImagesHandler,
   movieVideos: movieVideosHandler,
+
+  // TV Show details
+  tvShowDetails: tvShowDetailsHandler,
+  tvShowCredits: tvShowCreditsHandler,
+  tvShowImages: tvShowImagesHandler,
+  tvShowVideos: tvShowVideosHandler,
 });
