@@ -36,7 +36,7 @@ const TVShowResult = z.object({
 const imageResult = z.object({
   aspect_ratio: z.number(),
   height: z.number(),
-  iso_639_1: z.string(),
+  iso_639_1: z.string().nullable(),
   file_path: z.string(),
   vote_average: z.number(),
   vote_count: z.number(),
@@ -87,6 +87,8 @@ const genreResult = z.object({
   id: z.number(),
   name: z.string(),
 });
+
+export type GenreResult = z.infer<typeof genreResult>;
 
 const productionCompanyResult = z.object({
   id: z.number(),
@@ -142,12 +144,14 @@ export const MovieDetailsResponse = z.object({
   id: z.number(),
   adult: z.boolean(),
   backdrop_path: z.string().nullable(),
-  belongs_to_collection: z.object({
-    id: z.number(),
-    name: z.string(),
-    poster_path: z.string().nullable(),
-    backdrop_path: z.string().nullable(),
-  }),
+  belongs_to_collection: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      poster_path: z.string().nullable(),
+      backdrop_path: z.string().nullable(),
+    })
+    .nullable(),
   budget: z.number(),
   genres: z.array(genreResult),
   homepage: z.string().nullable(),
