@@ -20,7 +20,7 @@ export function Sider() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY === 0 || currentScrollY > lastScrollY);
+      setIsScrolled(currentScrollY > lastScrollY);
       lastScrollY = currentScrollY;
     };
 
@@ -34,8 +34,8 @@ export function Sider() {
   return (
     <aside
       className={cn(
-        "group fixed bottom-0 left-0 top-[unset] z-50 flex h-auto w-full flex-col items-center justify-center bg-secondary py-3 transition-all duration-300",
-        "lg:bottom-[unset] lg:top-0 lg:h-screen lg:w-20 lg:bg-transparent",
+        "group z-50 flex h-auto w-full flex-col items-center justify-center bg-secondary py-3 transition-all duration-300",
+        "fixed bottom-0 left-0 top-[unset] lg:bottom-[unset] lg:top-0 lg:h-screen lg:w-20 lg:bg-transparent",
         "py-4 lg:py-0",
         isMobile && isScrolled ? "translate-y-10" : "translate-y-0",
       )}
