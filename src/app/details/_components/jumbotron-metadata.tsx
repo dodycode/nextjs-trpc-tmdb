@@ -1,32 +1,46 @@
 import { DotSeparator } from "~/components/dot-separator";
 import type { JumbotronProps } from "./jumbotron";
-import { api } from "~/trpc/react";
 import { useMemo } from "react";
 import dayjs from "dayjs";
+import useMovieDetails from "~/hooks/use-movie-details";
 
 const JumbotronMetadata: React.FC<JumbotronProps> = ({ type, id }) => {
-  const utils = api.useUtils();
+  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(id, type);
 
-  const releaseDate = useMemo(() => {
+  const content = useMemo(() => {
+    let releaseDate = "";
+    let episodes = "";
+
+    if (isLoadingMovieDetails)
+      return {
+        releaseDate,
+        episodes,
+      };
+
     if (type === "movie") {
-      const movieDetails = utils.tmdb.movieDetails.getData({
-        movie_id: id,
-      });
-      return dayjs(movieDetails?.release_date ?? "").format("YYYY");
+      releaseDate = dayjs(movieDetails?.release_date ?? "").format("YYYY");
     }
 
-    return "";
-  }, [type, id, utils.tmdb.movieDetails]);
+    if (type === "tv") {
+      releaseDate = dayjs(movieDetails?.first_air_date ?? "").format("YYYY");
+      episodes = movieDetails?.number_of_episodes?.toString() ?? "";
+    }
+
+    return {
+      releaseDate,
+      episodes,
+    };
+  }, [type, isLoadingMovieDetails, movieDetails]);
 
   return (
     <div className="group flex items-baseline gap-3 text-base">
-      <span className="font-bold">{releaseDate}</span>
+      <span className="font-bold">{content.releaseDate}</span>
       <DotSeparator />
       <span>{type === "movie" ? "Movie" : "TV Series"}</span>
       {type === "tv" && (
         <>
           <DotSeparator />
-          <span>16 episodes</span>
+          <span>{content.episodes} episodes</span>
         </>
       )}
     </div>

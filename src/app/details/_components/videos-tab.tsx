@@ -1,38 +1,35 @@
-import { TabsContent } from "~/components/ui/tabs";
-import type { DetailsTabsProps } from "./tabs";
-import { api } from "~/trpc/react";
 import { useMemo } from "react";
 import ReactPlayer from "react-player/lazy";
+
+import { TabsContent } from "~/components/ui/tabs";
+import type { DetailsTabsProps } from "./tabs";
 import { generateVideoEmbedUrl } from "~/lib/utils";
 import { VideoModal } from "./video-modal";
+import useMovieVideos from "~/hooks/use-movie-videos";
 
 const DetailsVideos: React.FC<DetailsTabsProps> = ({ type, id }) => {
-  const utils = api.useUtils();
+  const { movieVideos, isLoadingMovieVideos } = useMovieVideos(id, type);
 
   const videos = useMemo(() => {
-    if (type === "movie") {
-      const movieVideos = utils.tmdb.movieVideos.getData({ movie_id: id });
-      if (movieVideos?.results.length) {
-        const filteredResults = movieVideos.results.filter(
-          (result) => !result.name.includes("[Dubbed]"),
-        );
-        return filteredResults.map((video) => {
-          const url = generateVideoEmbedUrl(video.site, video.key);
-          if (!url) return null;
+    if (movieVideos?.results.length && !isLoadingMovieVideos) {
+      const filteredResults = movieVideos.results.filter(
+        (result) => !result.name.includes("[Dubbed]"),
+      );
+      return filteredResults.map((video) => {
+        const url = generateVideoEmbedUrl(video.site, video.key);
+        if (!url) return null;
 
-          return url;
-        });
-      }
-
-      return [];
+        return url;
+      });
     }
 
     return [];
-  }, [type, id, utils.tmdb.movieVideos]);
+  }, [movieVideos, isLoadingMovieVideos]);
 
   return (
     <TabsContent value="videos">
       <div className="grid grid-cols-2 gap-4 px-4 md:grid-cols-3 lg:pr-20">
+        {isLoadingMovieVideos && "Loading..."}
         {!videos.length && "No videos found"}
         {videos.map((videoURL, index) => (
           <VideoModal key={index} url={videoURL ?? ""}>

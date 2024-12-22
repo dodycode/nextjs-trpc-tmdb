@@ -4,19 +4,19 @@ import { DetailsTabs } from "../../_components/tabs";
 import { Jumbotron } from "../../_components/jumbotron";
 import useMovieDetailsPage from "~/hooks/use-movie-details-page";
 
-export type MovieDetailsProp = {
+export type TVShowDetailsProp = {
   movieId: number;
 };
 
-const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
+const TVShowDetails: React.FC<TVShowDetailsProp> = ({ movieId }) => {
   useMovieDetailsPage(movieId);
 
   return (
     <>
-      <Jumbotron type="movie" id={movieId} />
-      <DetailsTabs type="movie" id={movieId} />
+      <Jumbotron type="tv" id={movieId} />
+      <DetailsTabs type="tv" id={movieId} />
     </>
   );
 };
 
-export { MovieDetails };
+export { TVShowDetails };

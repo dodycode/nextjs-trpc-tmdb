@@ -4,7 +4,9 @@ import React, { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import { buildThresholdList } from "~/lib/utils";
 import { JumbotronContent } from "./jumbotron-content";
-import { api } from "~/trpc/react";
+
+import useMovieImages from "~/hooks/use-movie-images";
+import useMovieDetails from "~/hooks/use-movie-details";
 
 const baseURL = "https://image.tmdb.org/t/p/original";
 
@@ -23,9 +25,10 @@ export type JumbotronProps = {
 };
 
 const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
-  const utils = api.useUtils();
-
   const bgImageRef = useRef<HTMLImageElement | null>(null);
+
+  const { movieImages, isLoadingMovieImages } = useMovieImages(id, type);
+  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(id, type);
 
   // change background image opacity on scroll
   useEffect(() => {
@@ -58,58 +61,57 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
     return () => observer.disconnect();
   }, []);
 
-  const backdropPath = useMemo(() => {
-    if (type === "movie") {
-      const movieImages = utils.tmdb.movieImages.getData({
-        movie_id: id,
-      });
-
-      if (movieImages?.backdrops.length) {
-        return (
-          movieImages.backdrops.find(
-            (backdrop) =>
-              backdrop.iso_639_1 === "en" ||
-              backdrop.iso_639_1 === "uk" ||
-              backdrop.iso_639_1 === "zh" ||
-              backdrop.iso_639_1 === null,
-          )?.file_path ?? ""
-        );
-      }
-
-      return "";
+  const content = useMemo(() => {
+    let backdropPath = "";
+    let title = "";
+    if (movieImages?.backdrops.length && !isLoadingMovieImages) {
+      backdropPath =
+        movieImages.backdrops.find(
+          (backdrop) =>
+            backdrop.iso_639_1 === "en" ||
+            backdrop.iso_639_1 === "uk" ||
+            backdrop.iso_639_1 === "zh" ||
+            backdrop.iso_639_1 === null,
+        )?.file_path ?? "";
     }
 
-    // Todo: trpc api for tv show
-
-    return "";
-  }, [type, utils.tmdb.movieImages, id]);
-
-  const title = useMemo(() => {
-    if (type === "movie") {
-      const movieDetails = utils.tmdb.movieDetails.getData({
-        movie_id: id,
-      });
-
-      if (movieDetails) {
-        return movieDetails.title;
-      }
+    if (movieDetails && !isLoadingMovieDetails && type == "movie") {
+      title = movieDetails.title ?? "";
     }
 
-    // todo: trpc api details for tv show
-    return "";
-  }, [type, utils.tmdb.movieDetails, id]);
+    if (movieDetails && !isLoadingMovieDetails && type == "tv") {
+      title = movieDetails.name ?? "";
+    }
+
+    return {
+      backdropPath,
+      title,
+    };
+  }, [
+    type,
+    movieImages,
+    isLoadingMovieImages,
+    movieDetails,
+    isLoadingMovieDetails,
+  ]);
+
+  // Todo: Design a better loading screen
+  if (isLoadingMovieDetails || isLoadingMovieImages)
+    return <div>Loading jumbotron</div>;
 
   return (
     <div className="relative h-dvh w-full overflow-hidden">
-      <Image
-        ref={bgImageRef}
-        src={`${baseURL}${backdropPath}`}
-        alt={`${title} backdrop`}
-        className="object-cover object-center"
-        quality={100}
-        fill
-        sizes="100vw"
-      />
+      {content.backdropPath && (
+        <Image
+          ref={bgImageRef}
+          src={`${baseURL}${content.backdropPath}`}
+          alt={`${content.title} backdrop`}
+          className="object-cover object-center"
+          quality={100}
+          fill
+          sizes="100vw"
+        />
+      )}
       <Backdrop />
       <JumbotronContent type={type} id={id} />
     </div>

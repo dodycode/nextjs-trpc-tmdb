@@ -53,7 +53,7 @@ const DiscoverShows: React.FC = () => {
     <div className="grid grid-cols-2 items-stretch gap-2 md:grid-cols-4 lg:grid-cols-7">
       {TVShowLists?.results.map((show) => {
         return (
-          <Link key={show.id} href={`/details/${show.id}`}>
+          <Link key={show.id} href={`/details/tv/${show.id}`}>
             <MovieCard src={show.poster_path ?? ""} alt={show.original_name} />
           </Link>
         );
