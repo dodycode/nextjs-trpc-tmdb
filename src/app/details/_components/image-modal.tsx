@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import CldImage from "~/components/cld-image";
 import {
   Dialog,
@@ -16,8 +14,6 @@ const ImageModal: React.FC<{ url: string; children: React.ReactNode }> = ({
   url,
   children,
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
-
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -27,22 +23,14 @@ const ImageModal: React.FC<{ url: string; children: React.ReactNode }> = ({
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogTitle className="hidden">&nbsp;</DialogTitle>
-        <div className="relative h-dvh w-full min-w-[70vw] lg:h-[500px]">
-          {isLoading && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              Loading...
-            </div>
-          )}
+        <div className="relative mx-auto h-dvh w-full min-w-[70vw] lg:h-[500px]">
           <CldImage
             src={`${baseURL}${url}`}
             alt=""
             fill
-            sizes="(max-width: 768px) 400px, (max-width: 1024px) 500px"
+            sizes="(max-width: 768px) 400px, (max-width: 1024px) 500px, 500px"
             className="h-full w-full object-contain"
             priority={true}
-            onLoad={() => {
-              setIsLoading(false);
-            }}
             quality={100}
           />
         </div>
