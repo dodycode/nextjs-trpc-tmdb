@@ -5,6 +5,7 @@ const MediaResult = z.object({
   title: z.string().optional().nullable(),
   name: z.string().optional().nullable(),
   poster_path: z.string().optional().nullable(),
+  poster_path_base64: z.string().optional().nullable(),
   backdrop_path: z.string().optional().nullable(),
   release_date: z.string().optional().nullable(),
   first_air_date: z.string().optional().nullable(),

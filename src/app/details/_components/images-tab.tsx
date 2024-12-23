@@ -6,13 +6,12 @@ import type { DetailsTabsProps } from "./tabs";
 import { MasonryGrid } from "~/components/masonry-grid";
 import { ImageModal } from "./image-modal";
 import useMovieImages from "~/hooks/use-movie-images";
-import { Skeleton } from "~/components/ui/skeleton";
+import CldImage from "~/components/cld-image";
 
 const baseURL = "https://image.tmdb.org/t/p/original";
 
 const DetailsImages: React.FC<DetailsTabsProps> = ({ type, id }) => {
   const { movieImages, isLoadingMovieImages } = useMovieImages(id, type);
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const images = useMemo(() => {
     if (movieImages?.backdrops?.length && !isLoadingMovieImages) {
@@ -34,17 +33,13 @@ const DetailsImages: React.FC<DetailsTabsProps> = ({ type, id }) => {
             return (
               <ImageModal key={image} url={`${baseURL}${image}`}>
                 <div className="group relative col-span-1 cursor-pointer overflow-hidden rounded-xl">
-                  {isLoadingImage && <Skeleton className="h-full w-full" />}
-                  <Image
+                  <CldImage
                     src={`${baseURL}${image}`}
                     alt={image}
                     fill
                     sizes="(max-width: 768px) 300px, (max-width: 1024px) 500px"
                     className="object-cover object-center transition-all duration-300 ease-in-out group-hover:scale-110"
                     quality={100}
-                    onLoad={() => {
-                      setIsLoadingImage(false);
-                    }}
                   />
                 </div>
               </ImageModal>

@@ -1,48 +1,46 @@
-import { type ImageProps, getImageProps } from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+"use client";
 
-type Props = Omit<ImageProps, "fill">;
+import { getCldImageUrl, type CldImageProps } from "next-cloudinary";
+import { useState } from "react";
+import { Avatar, AvatarImage } from "~/components/ui/avatar";
+import { cn } from "~/lib/utils";
+
+type Props = CldImageProps;
 
 export default function NextAvatar(props: Props) {
-  const imageProps = getImageProps({ width: 40, height: 40, ...props }).props;
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Helper functions to replace lodash pick and omit
-  const pick = <T extends object, K extends keyof T>(
-    obj: T,
-    keys: K[],
-  ): Pick<T, K> => {
-    return keys.reduce(
-      (acc, key) => {
-        if (obj.hasOwnProperty(key)) {
-          acc[key] = obj[key];
-        }
-        return acc;
-      },
-      {} as Pick<T, K>,
-    );
-  };
-
-  const omit = <T extends object, K extends keyof T>(
-    obj: T,
-    keys: K[],
-  ): Omit<T, K> => {
-    const result = { ...obj };
-    keys.forEach((key) => delete result[key]);
-    return result;
-  };
+  const src = !props.src.includes("placehold.co")
+    ? getCldImageUrl({
+        width: props.width,
+        height: props.height,
+        deliveryType: "fetch",
+        ...props,
+      })
+    : props.src;
 
   return (
     <Avatar
       className={props.className}
-      style={pick(imageProps, ["width", "height"])}
+      style={{
+        width: props.width,
+        height: props.height,
+      }}
     >
       <AvatarImage
-        {...omit(imageProps, ["style"])}
-        style={pick(imageProps.style, ["objectFit", "objectPosition"])}
+        src={src}
+        className={cn(
+          "h-full w-full object-cover",
+          "transition-opacity duration-300 ease-in-out",
+        )}
+        style={{
+          opacity: isLoading ? 0 : 1,
+        }}
+        alt={props.alt}
+        onLoad={() => {
+          setIsLoading(false);
+        }}
       />
-      {imageProps.placeholder === "blur" && (
-        <AvatarFallback style={imageProps.style} />
-      )}
     </Avatar>
   );
 }
