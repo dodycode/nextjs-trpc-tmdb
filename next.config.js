@@ -21,6 +21,38 @@ const config = {
         pathname: "/**",
       },
     ],
+    // minimum cache time forever for remote images
+    minimumCacheTTL: 31536000,
+  },
+
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
+  headers: async () => {
+    return [
+      {
+        source: "/details/tv/:slug",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, s-maxage=2628000, max-age=2628000, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: "/details/movie/:slug",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=2628000, max-age=2628000",
+          },
+        ],
+      },
+    ];
   },
 };
 

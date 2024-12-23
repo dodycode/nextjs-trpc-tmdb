@@ -113,8 +113,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
           className="object-cover object-center"
           quality={100}
           fill
-          sizes="100vw"
-          priority={true}
+          sizes="(max-width: 480px) 400px, (max-width: 768px) 600px, (max-width: 1024px) 800px, 100vw"
         />
       )}
       <Backdrop />

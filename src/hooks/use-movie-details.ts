@@ -1,8 +1,9 @@
 "use client";
 
+import { cache } from "react";
 import { api } from "~/trpc/react";
 
-export default function useMovieDetails(movieId: number, type: "movie" | "tv") {
+const useMovieDetails = cache((movieId: number, type: "movie" | "tv") => {
   const {
     data: movieDetails,
     isFetching,
@@ -16,6 +17,8 @@ export default function useMovieDetails(movieId: number, type: "movie" | "tv") {
       enabled: !!movieId,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
+      // max-age one month
+      staleTime: 30 * 24 * 60 * 60 * 1000,
     },
   );
 
@@ -23,4 +26,6 @@ export default function useMovieDetails(movieId: number, type: "movie" | "tv") {
   const isLoading = isFetching || isPending;
 
   return { movieDetails, isLoadingMovieDetails: isLoading };
-}
+});
+
+export default useMovieDetails;

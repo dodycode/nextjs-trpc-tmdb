@@ -53,11 +53,15 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           headers: () => {
             const headers = new Headers();
             headers.set("x-trpc-source", "nextjs-react");
+            headers.set(
+              "Cache-Control",
+              "public, s-maxage=2628000, max-age=2628000, stale-while-revalidate=604800",
+            );
             return headers;
           },
         }),
       ],
-    })
+    }),
   );
 
   return (

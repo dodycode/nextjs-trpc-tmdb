@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import Image from "next/image";
+import { useMemo } from "react";
 
 import { TabsContent } from "~/components/ui/tabs";
 import type { DetailsTabsProps } from "./tabs";
