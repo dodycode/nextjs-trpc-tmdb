@@ -47,6 +47,7 @@ export function Sider() {
           className="absolute top-5 z-50 scale-75 brightness-0 invert"
           width={100}
           height={100}
+          unoptimized
         />
       )}
       {!isMobile && <div className="bg-disney-sidenav-backdrop" />}

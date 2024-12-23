@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef } from "react";
-import Image from "next/image";
 import { buildThresholdList } from "~/lib/utils";
 import { JumbotronContent } from "./jumbotron-content";
 
 import useMovieImages from "~/hooks/use-movie-images";
 import useMovieDetails from "~/hooks/use-movie-details";
+import CldImage from "~/components/cld-image";
 
 const baseURL = "https://image.tmdb.org/t/p/original";
 
@@ -106,7 +106,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
   return (
     <div className="relative h-dvh w-full overflow-hidden">
       {content.backdropPath && (
-        <Image
+        <CldImage
           ref={bgImageRef}
           src={`${baseURL}${content.backdropPath}`}
           alt={`${content.title} backdrop`}
@@ -114,6 +114,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
           quality={100}
           fill
           sizes="100vw"
+          priority={true}
         />
       )}
       <Backdrop />

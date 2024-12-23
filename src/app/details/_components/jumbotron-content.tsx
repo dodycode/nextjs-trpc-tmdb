@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 
-import Image from "next/image";
 import { Icon } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import { JumbotronMetadata } from "./jumbotron-metadata";
@@ -15,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import CldImage from "~/components/cld-image";
 
 const logobaseURL = "https://image.tmdb.org/t/p/w300";
 
@@ -60,7 +60,7 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger>
-              <Image
+              <CldImage
                 src={`${logobaseURL}${content.logoPath}`}
                 alt={content.title}
                 width={300}

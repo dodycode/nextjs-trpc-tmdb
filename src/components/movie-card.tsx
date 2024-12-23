@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { useMemo } from "react";
 import { cn } from "~/lib/utils";
+import CldImage from "./cld-image";
 
 interface MovieCardProps {
   src: string;
@@ -32,7 +32,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
         className,
       )}
     >
-      <Image
+      <CldImage
         src={posterPath}
         alt={alt}
         className={cn(

@@ -1,7 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import CldImage from "~/components/cld-image";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +33,7 @@ const ImageModal: React.FC<{ url: string; children: React.ReactNode }> = ({
               Loading...
             </div>
           )}
-          <Image
+          <CldImage
             src={`${baseURL}${url}`}
             alt=""
             fill
