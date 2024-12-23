@@ -5,6 +5,7 @@ import {
   type CldImageProps,
 } from "next-cloudinary";
 import { cn } from "~/lib/utils";
+import { Skeleton } from "./ui/skeleton";
 
 const CldImage = (
   props: CldImageProps & { ref?: RefObject<HTMLImageElement | null> },
@@ -13,6 +14,7 @@ const CldImage = (
 
   return (
     <>
+      {isLoading && <Skeleton className="h-full w-full" />}
       <CldImageDefault
         ref={props.ref}
         className={cn(

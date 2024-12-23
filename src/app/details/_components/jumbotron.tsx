@@ -99,10 +99,6 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
     isLoadingMovieDetails,
   ]);
 
-  // Todo: Design a better loading screen
-  if (isLoadingMovieDetails || isLoadingMovieImages)
-    return <div>Loading jumbotron</div>;
-
   return (
     <div className="relative h-dvh w-full overflow-hidden">
       {content.backdropPath && (
