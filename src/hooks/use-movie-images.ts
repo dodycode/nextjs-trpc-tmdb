@@ -1,8 +1,9 @@
 "use client";
 
+import { cache } from "react";
 import { api } from "~/trpc/react";
 
-export default function useMovieImages(movieId: number, type: "movie" | "tv") {
+const useMovieImages = cache((movieId: number, type: "movie" | "tv") => {
   const {
     data: movieImages,
     isFetching,
@@ -13,6 +14,8 @@ export default function useMovieImages(movieId: number, type: "movie" | "tv") {
       enabled: !!movieId,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
+      // max-age one month
+      staleTime: 30 * 24 * 60 * 60 * 1000,
     },
   );
 
@@ -20,4 +23,6 @@ export default function useMovieImages(movieId: number, type: "movie" | "tv") {
   const isLoading = isFetching || isPending;
 
   return { movieImages, isLoadingMovieImages: isLoading };
-}
+});
+
+export default useMovieImages;

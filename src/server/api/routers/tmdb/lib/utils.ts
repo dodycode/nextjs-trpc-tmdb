@@ -1,10 +1,11 @@
+import { cache } from "react";
 import { env } from "~/env";
 
 // TMDB API v3
 // I'm not using v4 yet because it's still not stable
 const baseURL = "https://api.themoviedb.org/3";
 
-export const tmdbAPI = async (endpointURL: string) => {
+export const tmdbAPI = cache(async (endpointURL: string) => {
   const token = env.TMDB_API_KEY;
   if (!token) throw new Error("No token provided");
 
@@ -20,7 +21,7 @@ export const tmdbAPI = async (endpointURL: string) => {
   });
 
   return response;
-};
+});
 
 export const defaultFilter = (strParams: string[], movie?: boolean) => {
   strParams.push(`language=en-US`);

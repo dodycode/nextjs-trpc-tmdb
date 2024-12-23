@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { cache, useCallback, useEffect } from "react";
 import { api } from "~/trpc/react";
 
-export default function useDiscoverMovies(type: "movie" | "tv") {
+const useDiscoverMovies = cache((type: "movie" | "tv") => {
   // Infinite Scroll
   const {
     data: movies,
@@ -45,4 +45,6 @@ export default function useDiscoverMovies(type: "movie" | "tv") {
   const isLoading = isPending || isFetching;
 
   return { movies, isLoading, hasNextPage, fetchNextPage };
-}
+});
+
+export default useDiscoverMovies;
