@@ -48,7 +48,8 @@ const config = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, s-maxage=2628000, max-age=2628000",
+            value:
+              "public, s-maxage=2628000, max-age=2628000, stale-while-revalidate=604800",
           },
         ],
       },
