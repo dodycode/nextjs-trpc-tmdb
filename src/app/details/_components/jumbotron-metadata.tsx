@@ -3,9 +3,16 @@ import type { JumbotronProps } from "./jumbotron";
 import { useMemo } from "react";
 import dayjs from "dayjs";
 import useMovieDetails from "~/hooks/use-movie-details";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const JumbotronMetadata: React.FC<JumbotronProps> = ({ type, id }) => {
-  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(id, type);
+  const { movieDetailsInitialData } = useMovieDetailsContext();
+
+  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(
+    id,
+    type,
+    movieDetailsInitialData,
+  );
 
   const content = useMemo(() => {
     let releaseDate = "";

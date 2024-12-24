@@ -16,11 +16,18 @@ import type { JumbotronProps } from "./jumbotron";
 import { generateVideoEmbedUrl } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
 import useMovieVideos from "~/hooks/use-movie-videos";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const JumbotronTrailerModal: React.FC<JumbotronProps> = ({ id, type }) => {
   const isMobile = useIsMobile();
 
-  const { movieVideos, isLoadingMovieVideos } = useMovieVideos(id, type);
+  const { movieVideosInitialData } = useMovieDetailsContext();
+
+  const { movieVideos, isLoadingMovieVideos } = useMovieVideos(
+    id,
+    type,
+    movieVideosInitialData,
+  );
 
   const videoURL = useMemo(() => {
     if (movieVideos?.results?.length && !isLoadingMovieVideos) {

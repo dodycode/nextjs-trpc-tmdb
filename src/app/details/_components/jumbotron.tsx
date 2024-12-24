@@ -7,6 +7,7 @@ import { JumbotronContent } from "./jumbotron-content";
 import useMovieImages from "~/hooks/use-movie-images";
 import useMovieDetails from "~/hooks/use-movie-details";
 import CldImage from "~/components/cld-image";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const baseURL = "https://image.tmdb.org/t/p/original";
 
@@ -27,8 +28,19 @@ export type JumbotronProps = {
 const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
   const bgImageRef = useRef<HTMLImageElement | null>(null);
 
-  const { movieImages, isLoadingMovieImages } = useMovieImages(id, type);
-  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(id, type);
+  const { movieDetailsInitialData, movieImagesInitialData } =
+    useMovieDetailsContext();
+
+  const { movieImages, isLoadingMovieImages } = useMovieImages(
+    id,
+    type,
+    movieImagesInitialData,
+  );
+  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(
+    id,
+    type,
+    movieDetailsInitialData,
+  );
 
   // change background image opacity on scroll
   useEffect(() => {

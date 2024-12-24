@@ -32,6 +32,7 @@ const ImageModal: React.FC<{ url: string; children: React.ReactNode }> = ({
             className="h-full w-full object-contain"
             priority={true}
             quality={100}
+            showLoading
           />
         </div>
       </DialogContent>

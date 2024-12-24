@@ -1,6 +1,11 @@
-import { Container } from "~/components/container";
-import { MovieDetails } from "../_components/movie-details";
+import { MovieDetails } from "./_components/movie-details";
 import { notFound } from "next/navigation";
+import { api, HydrateClient } from "~/trpc/server";
+import { MovieDetailsProvider } from "../../_context/details-provider";
+
+export const fetchCache = "default-cache";
+// after 1 month
+export const revalidate = 2628000;
 
 export default async function Movie({
   params,
@@ -13,9 +18,37 @@ export default async function Movie({
     return notFound();
   }
 
+  // Prefetch data in the server
+  const [movieDetails, movieImages, movieCredits, movieVideos] =
+    await Promise.all([
+      api.tmdb.movieDetails({
+        movie_id: parseInt(slug),
+        type: "movie",
+      }),
+      api.tmdb.movieImages({
+        movie_id: parseInt(slug),
+        type: "movie",
+      }),
+      api.tmdb.movieCredits({
+        movie_id: parseInt(slug),
+        type: "movie",
+      }),
+      api.tmdb.movieVideos({
+        movie_id: parseInt(slug),
+        type: "movie",
+      }),
+    ]);
+
   return (
-    <Container className="flex flex-col gap-20 px-0 lg:px-0 lg:pl-20">
-      <MovieDetails movieId={parseInt(slug)} />
-    </Container>
+    <HydrateClient>
+      <MovieDetailsProvider
+        movieDetailsInitialData={movieDetails}
+        movieCreditsInitialData={movieCredits}
+        movieImagesInitialData={movieImages}
+        movieVideosInitialData={movieVideos}
+      >
+        <MovieDetails movieId={parseInt(slug)} />
+      </MovieDetailsProvider>
+    </HydrateClient>
   );
 }

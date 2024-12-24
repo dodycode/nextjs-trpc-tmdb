@@ -15,12 +15,24 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import CldImage from "~/components/cld-image";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const logobaseURL = "https://image.tmdb.org/t/p/w300";
 
 const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
-  const { movieImages, isLoadingMovieImages } = useMovieImages(id, type);
-  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(id, type);
+  const { movieDetailsInitialData, movieImagesInitialData } =
+    useMovieDetailsContext();
+
+  const { movieImages, isLoadingMovieImages } = useMovieImages(
+    id,
+    type,
+    movieImagesInitialData,
+  );
+  const { movieDetails, isLoadingMovieDetails } = useMovieDetails(
+    id,
+    type,
+    movieDetailsInitialData,
+  );
 
   const content = useMemo(() => {
     // get logo
