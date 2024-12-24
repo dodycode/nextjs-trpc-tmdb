@@ -46,7 +46,7 @@ const DetailsImages: React.FC<DetailsTabsProps> = ({ type, id }) => {
                     sizes="(max-width: 768px) 300px, (max-width: 1024px) 500px"
                     className="object-cover object-center transition-all duration-300 ease-in-out group-hover:scale-110"
                     quality={100}
-                    showLoading
+                    showloading="true"
                   />
                 </div>
               </ImageModal>

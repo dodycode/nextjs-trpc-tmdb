@@ -10,14 +10,14 @@ import { Skeleton } from "./ui/skeleton";
 const CldImage = (
   props: CldImageProps & {
     ref?: RefObject<HTMLImageElement | null>;
-    showLoading?: boolean;
+    showloading?: string;
   },
 ) => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <>
-      {props.showLoading && <Skeleton className="h-full w-full" />}
+      {props.showloading && <Skeleton className="h-full w-full" />}
       <CldImageDefault
         ref={props.ref}
         className={cn(
