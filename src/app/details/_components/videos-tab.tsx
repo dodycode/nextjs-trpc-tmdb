@@ -6,9 +6,16 @@ import type { DetailsTabsProps } from "./tabs";
 import { generateVideoEmbedUrl } from "~/lib/utils";
 import { VideoModal } from "./video-modal";
 import useMovieVideos from "~/hooks/use-movie-videos";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const DetailsVideos: React.FC<DetailsTabsProps> = ({ type, id }) => {
-  const { movieVideos, isLoadingMovieVideos } = useMovieVideos(id, type);
+  const { movieVideosInitialData } = useMovieDetailsContext();
+
+  const { movieVideos, isLoadingMovieVideos } = useMovieVideos(
+    id,
+    type,
+    movieVideosInitialData,
+  );
 
   const videos = useMemo(() => {
     if (movieVideos?.results?.length && !isLoadingMovieVideos) {

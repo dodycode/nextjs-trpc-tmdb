@@ -42,6 +42,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
         quality={85}
         sizes="(max-width: 768px) 167px, (max-width: 1024px) 215px, 200px"
         fill
+        showLoading
       />
     </div>
   );

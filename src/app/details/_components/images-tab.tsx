@@ -6,11 +6,18 @@ import { MasonryGrid } from "~/components/masonry-grid";
 import { ImageModal } from "./image-modal";
 import useMovieImages from "~/hooks/use-movie-images";
 import CldImage from "~/components/cld-image";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const baseURL = "https://image.tmdb.org/t/p/original";
 
 const DetailsImages: React.FC<DetailsTabsProps> = ({ type, id }) => {
-  const { movieImages, isLoadingMovieImages } = useMovieImages(id, type);
+  const { movieImagesInitialData } = useMovieDetailsContext();
+
+  const { movieImages, isLoadingMovieImages } = useMovieImages(
+    id,
+    type,
+    movieImagesInitialData,
+  );
 
   const images = useMemo(() => {
     if (movieImages?.backdrops?.length && !isLoadingMovieImages) {
@@ -39,6 +46,7 @@ const DetailsImages: React.FC<DetailsTabsProps> = ({ type, id }) => {
                     sizes="(max-width: 768px) 300px, (max-width: 1024px) 500px"
                     className="object-cover object-center transition-all duration-300 ease-in-out group-hover:scale-110"
                     quality={100}
+                    showLoading
                   />
                 </div>
               </ImageModal>

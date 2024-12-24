@@ -1,21 +1,19 @@
 "use client";
 
-import { DetailsTabs } from "../../_components/tabs";
-import { Jumbotron } from "../../_components/jumbotron";
-import useMovieDetailsPage from "~/hooks/use-movie-details-page";
+import { DetailsTabs } from "../../../_components/tabs";
+import { Jumbotron } from "../../../_components/jumbotron";
+import { Container } from "~/components/container";
 
 export type TVShowDetailsProp = {
   movieId: number;
 };
 
 const TVShowDetails: React.FC<TVShowDetailsProp> = ({ movieId }) => {
-  useMovieDetailsPage(movieId);
-
   return (
-    <>
+    <Container className="flex flex-col gap-20 px-0 lg:px-0 lg:pl-20">
       <Jumbotron type="tv" id={movieId} />
       <DetailsTabs type="tv" id={movieId} />
-    </>
+    </Container>
   );
 };
 

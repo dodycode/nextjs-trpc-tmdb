@@ -7,6 +7,7 @@ import NextAvatar from "~/components/next-avatar";
 import type { DetailsTabsProps } from "./tabs";
 
 import useMovieCredits from "~/hooks/use-movie-credits";
+import { useMovieDetailsContext } from "../_context/details-provider";
 
 const baseURL = "https://image.tmdb.org/t/p/w200";
 
@@ -42,7 +43,13 @@ const Cast: React.FC<{
 };
 
 const DetailsCasts: React.FC<DetailsTabsProps> = ({ type, id }) => {
-  const { movieCredits, isLoadingMovieCredits } = useMovieCredits(id, type);
+  const { movieCreditsInitialData } = useMovieDetailsContext();
+
+  const { movieCredits, isLoadingMovieCredits } = useMovieCredits(
+    id,
+    type,
+    movieCreditsInitialData,
+  );
 
   const cast = useMemo(() => {
     if (!movieCredits || isLoadingMovieCredits) return [];
