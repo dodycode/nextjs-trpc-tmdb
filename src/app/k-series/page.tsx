@@ -4,14 +4,17 @@ import { SearchInput } from "../_components/search-input";
 
 import { Container } from "~/components/container";
 import { KoreanTVShowList } from "./_components/series";
-import { HydrateClient } from "~/trpc/server";
+import { api, HydrateClient } from "~/trpc/server";
 
 export const fetchCache = "default-cache";
 // after 1 day
 export const revalidate = 86400;
 
-export default function KSeries() {
-  // Todo: research about how to correctly pre-fetch infinite query data in the server
+export default async function KSeries() {
+  await api.tmdb.discover.prefetchInfinite({
+    type: "tv",
+    cursor: 1,
+  });
 
   return (
     <HydrateClient>

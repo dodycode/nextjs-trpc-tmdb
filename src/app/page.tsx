@@ -3,7 +3,7 @@ import { Filters } from "./_components/filters";
 import { DiscoverShows } from "./_components/discover-shows";
 import { SearchInput } from "./_components/search-input";
 import { Container } from "~/components/container";
-import { HydrateClient } from "~/trpc/server";
+import { api, HydrateClient } from "~/trpc/server";
 
 // stale while revalidate
 export const fetchCache = "default-cache";
@@ -11,7 +11,10 @@ export const fetchCache = "default-cache";
 export const revalidate = 86400;
 
 export default async function Home() {
-  // Todo: research about how to correctly pre-fetch infinite query data in the server
+  await api.tmdb.discover.prefetchInfinite({
+    type: "tv",
+    cursor: 1,
+  });
 
   return (
     <HydrateClient>
