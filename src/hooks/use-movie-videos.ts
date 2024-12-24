@@ -17,6 +17,7 @@ const useMovieVideos = cache(
         enabled: !!movieId,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
+        refetchOnReconnect: false,
         // max-age one month
         staleTime: 30 * 24 * 60 * 60 * 1000,
         initialData,

@@ -23,6 +23,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
       enabled: !!type,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     },
   );
 
