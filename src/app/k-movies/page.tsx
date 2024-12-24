@@ -5,6 +5,8 @@ import { SearchInput } from "../_components/search-input";
 import { Container } from "~/components/container";
 import { KoreanMovieList } from "./_components/movies";
 import { api, HydrateClient } from "~/trpc/server";
+import { Suspense } from "react";
+import { ShowsSkeleton } from "../_components/shows-skeleton";
 
 export const fetchCache = "default-cache";
 // after 1 day
@@ -24,7 +26,9 @@ export default async function KMovies() {
           <PageHeader title="K-Movies">
             <Filters />
           </PageHeader>
-          <KoreanMovieList />
+          <Suspense fallback={<ShowsSkeleton />}>
+            <KoreanMovieList />
+          </Suspense>
         </div>
       </Container>
     </HydrateClient>

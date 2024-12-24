@@ -122,6 +122,7 @@
   }
   .bg-disney-gradient {
     background: var(--disney-hostar-gradient);
+    @apply absolute left-0 top-0 h-full w-full;
   }
   .bg-disney-sidenav-backdrop {
     background: var(--disney-hotstar-sidenav-backdrop);
