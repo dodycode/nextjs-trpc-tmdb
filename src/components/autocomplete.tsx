@@ -3,7 +3,7 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Command as CommandPrimitive } from "cmdk";
 import type { KeyboardEvent } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -66,13 +66,18 @@ export const AutoComplete = ({
   onFocus,
   relativePopover = false,
 }: AutoCompleteProps) => {
-  const [filteredOptions, setFilteredOptions] = useState<Option[]>(options);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialRenderRef = useRef(true);
   const rowVirtualizerContainer = useRef<HTMLDivElement>(null);
 
   const [isOpen, setOpen] = useState(false);
-  const [input, setInput] = useState<string>(inputValue ?? "");
+
+  const filteredOptions = options.filter(
+    (option) =>
+      !value?.includes(option.value) &&
+      inputValue &&
+      option.label.toLowerCase().includes(inputValue?.toLowerCase()),
+  );
 
   const rowVirtualizer = useVirtualizer({
     count: filteredOptions?.length ?? 0,
@@ -81,16 +86,12 @@ export const AutoComplete = ({
     overscan: 5,
   });
 
-  // Sync input with inputValue prop
-  useEffect(() => {
-    setInput(inputValue ?? "");
-  }, [inputValue]);
-
   useEffect(() => {
     //If we clear value, we also need to clear input whenever it changes
     if (!value) {
-      setInput("");
+      onInputValueChange?.("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   // Update input when value exists in the first render
@@ -99,9 +100,10 @@ export const AutoComplete = ({
       const selectedOption = options.find((option) => option.value === value);
       if (selectedOption) {
         initialRenderRef.current = false;
-        setInput(selectedOption.label);
+        onInputValueChange?.(selectedOption.label);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, value]);
 
   useEffect(() => {
@@ -146,7 +148,6 @@ export const AutoComplete = ({
     if (value) {
       const selectedOption = options.find((option) => option.value === value);
       if (selectedOption) {
-        setInput(selectedOption.label);
         onInputValueChange?.(selectedOption.label);
       }
     }
@@ -162,25 +163,12 @@ export const AutoComplete = ({
     (selectedValue: string) => {
       const option = options.find((option) => option.value === selectedValue);
       if (option) {
-        setInput(option.label);
         onValueChange?.(selectedValue);
         onInputValueChange?.(option.label);
       }
       setOpen(false);
     },
     [onInputValueChange, onValueChange, options],
-  );
-
-  const handleSearch = useCallback(
-    (search: string) => {
-      // Compare with option label instead of value because the value can be different from the label
-      setFilteredOptions(
-        options.filter((option) =>
-          option.label.toLowerCase().includes(search.toLowerCase() ?? []),
-        ),
-      );
-    },
-    [options],
   );
 
   return (
@@ -209,11 +197,9 @@ export const AutoComplete = ({
         )}
         <CommandInput
           ref={inputRef}
-          value={input}
+          value={inputValue ?? ""}
           onValueChange={(value) => {
-            setInput(value);
             onInputValueChange?.(value);
-            handleSearch(value);
           }}
           onBlur={handleBlur}
           onFocus={() => {

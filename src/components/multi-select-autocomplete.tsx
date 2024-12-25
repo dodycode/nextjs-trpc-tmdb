@@ -90,7 +90,7 @@ export const MultiSelectAutocomplete = ({
 
   return (
     <CommandPrimitive
-      className={cn("relative z-50", className)}
+      className={cn("relative", className)}
       shouldFilter={false}
     >
       <div

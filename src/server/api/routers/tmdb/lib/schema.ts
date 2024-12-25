@@ -20,6 +20,7 @@ const MediaResult = z.object({
   video: z.boolean().optional().nullable(),
   adult: z.boolean().optional().nullable(),
   origin_country: z.array(z.string()).optional().nullable(),
+  media_type: z.string().optional().nullable(),
 });
 
 const imageResult = z.object({
