@@ -2,6 +2,7 @@
 
 import { parseAsArrayOf, parseAsInteger, useQueryState } from "nuqs";
 import { cache, useCallback, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 import { api } from "~/trpc/react";
 
 const useDiscoverMovies = cache((type: "movie" | "tv") => {
@@ -12,6 +13,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
       .withDefault([])
       .withOptions({ clearOnDefault: true }),
   );
+  const [debouncedGenres] = useDebounce(genres, 1000);
 
   // Infinite Scroll
   const {
@@ -21,7 +23,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
     hasNextPage,
     fetchNextPage,
   } = api.tmdb.discover.useInfiniteQuery(
-    { type, sortBy, genres },
+    { type, sortBy, genres: debouncedGenres },
     {
       getNextPageParam: (lastPage) => {
         if (lastPage.page < lastPage.total_pages) {
