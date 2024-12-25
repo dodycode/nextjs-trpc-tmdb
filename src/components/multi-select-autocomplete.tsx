@@ -115,7 +115,7 @@ export const MultiSelectAutocomplete = ({
       <div
         className={cn(
           "relative",
-          "flex h-11 flex-nowrap items-center gap-2 overflow-hidden rounded-lg bg-secondary px-[12px] py-[8px] text-secondary-foreground",
+          "flex h-11 flex-nowrap items-center gap-2 overflow-hidden overflow-x-auto rounded-lg bg-secondary px-[12px] py-[8px] text-secondary-foreground",
           classNameInputWrapper,
         )}
       >
