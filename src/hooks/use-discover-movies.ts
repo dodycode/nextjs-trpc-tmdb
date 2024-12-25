@@ -1,11 +1,17 @@
 "use client";
 
-import { useQueryState } from "nuqs";
+import { parseAsArrayOf, parseAsInteger, useQueryState } from "nuqs";
 import { cache, useCallback, useEffect } from "react";
 import { api } from "~/trpc/react";
 
 const useDiscoverMovies = cache((type: "movie" | "tv") => {
   const [sortBy] = useQueryState("sort_by");
+  const [genres] = useQueryState(
+    "genres",
+    parseAsArrayOf(parseAsInteger, "|")
+      .withDefault([])
+      .withOptions({ clearOnDefault: true }),
+  );
 
   // Infinite Scroll
   const {
@@ -15,7 +21,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
     hasNextPage,
     fetchNextPage,
   } = api.tmdb.discover.useInfiniteQuery(
-    { type, sortBy },
+    { type, sortBy, genres },
     {
       getNextPageParam: (lastPage) => {
         if (lastPage.page < lastPage.total_pages) {

@@ -1,8 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {
-  MovieSortByEnum,
-  TVShowsSortByEnum,
+import type {
+  MovieGenresEnum,
+  TVShowsGenresEnum,
 } from "~/server/api/routers/tmdb/lib/enum";
 
 export function cn(...inputs: ClassValue[]) {
@@ -64,4 +64,18 @@ export function getLabelFromSortbyEnums(value: string) {
 
   const capitalizedOrder = order.charAt(0).toUpperCase() + order.slice(1);
   return `${capitalizedText} (${capitalizedOrder})`;
+}
+
+export function getMovieGenreKeys(
+  movieGenresEnum: typeof MovieGenresEnum | typeof TVShowsGenresEnum,
+  value?: number,
+): string[] | string | undefined {
+  if (value === undefined) {
+    return Object.keys(movieGenresEnum);
+  } else {
+    const entry = Object.entries(movieGenresEnum).find(
+      ([_, val]) => val === value,
+    );
+    return entry ? entry[0] : undefined;
+  }
 }

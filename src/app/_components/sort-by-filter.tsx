@@ -13,7 +13,7 @@ import {
 const SortByFilter: React.FC<{ type: "movie" | "tv" }> = ({ type }) => {
   const [sortBy, setSortBy] = useQueryState("sort_by");
 
-  const sortByOptions = useMemo(() => {
+  const options = useMemo(() => {
     if (type === "movie") {
       return Object.values(MovieSortByEnum).map((sortBy) => ({
         label: getLabelFromSortbyEnums(sortBy),
@@ -29,7 +29,7 @@ const SortByFilter: React.FC<{ type: "movie" | "tv" }> = ({ type }) => {
 
   return (
     <AutoComplete
-      options={sortByOptions}
+      options={options}
       emptyMessage="No results"
       classNameInputWrapper="w-[100px]"
       rightIcon="caretDownAndUp"

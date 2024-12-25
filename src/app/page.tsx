@@ -23,6 +23,9 @@ export default async function Home({
     type: "tv",
     cursor: 1,
     sortBy: urlParams.sort_by,
+    genres: urlParams.genres
+      ? urlParams.genres.split("|").map(Number).filter(Boolean)
+      : undefined,
   });
 
   return (
