@@ -94,7 +94,8 @@ export const MultiSelectAutocomplete = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         itemListRef.current &&
-        !itemListRef.current.contains(event.target as Node)
+        !itemListRef.current.contains(event.target as Node) &&
+        !inputRef.current?.contains(event.target as Node)
       ) {
         setOpen(false);
         onBlur?.();
