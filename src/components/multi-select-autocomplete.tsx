@@ -165,7 +165,7 @@ export const MultiSelectAutocomplete = ({
           )}
         </div>
       </div>
-      <div className="absolute left-0 top-12 w-full">
+      <div className="absolute left-0 top-12 z-10 w-full">
         <div
           className={cn(
             "w-full cursor-pointer rounded-lg bg-secondary text-secondary-foreground outline-none animate-in fade-in-0 zoom-in-95",
