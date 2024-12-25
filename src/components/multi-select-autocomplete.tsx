@@ -1,5 +1,5 @@
 import { Command as CommandPrimitive } from "cmdk";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -48,6 +48,7 @@ export const MultiSelectAutocomplete = ({
   leftIcon,
   leftIconClassName,
 }: MultiSelectAutocompleteProps) => {
+  const itemListRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -72,9 +73,8 @@ export const MultiSelectAutocomplete = ({
         onValuesChange([...values, selectedValue]);
       }
       // Clear input and focus to open the dropdown
-      // This is a hacky way to detect blur
       setInputValue("");
-      inputRef.current?.focus();
+      setOpen(true);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [values],
@@ -83,10 +83,29 @@ export const MultiSelectAutocomplete = ({
   const handleRemove = useCallback(
     (valueToRemove: string) => {
       onValuesChange(values.filter((v) => v !== valueToRemove));
-      inputRef.current?.focus();
+      setOpen(true);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [values, onValuesChange],
   );
+
+  // Detect click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        itemListRef.current &&
+        !itemListRef.current.contains(event.target as Node) &&
+        !inputRef.current?.contains(event.target as Node)
+      ) {
+        setOpen(false);
+        onBlur?.();
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [onBlur]);
 
   return (
     <CommandPrimitive
@@ -99,13 +118,6 @@ export const MultiSelectAutocomplete = ({
           "flex h-11 flex-nowrap items-center gap-2 overflow-hidden rounded-lg bg-secondary px-[12px] py-[8px] text-secondary-foreground",
           classNameInputWrapper,
         )}
-        onClick={() => {
-          inputRef.current?.focus();
-        }}
-        onBlur={() => {
-          setOpen(false);
-          onBlur?.();
-        }}
       >
         {leftIcon && (
           <Icon
@@ -155,9 +167,12 @@ export const MultiSelectAutocomplete = ({
             disabled={disabled}
             className="h-auto flex-1 bg-transparent py-0 outline-none"
             classNameInputWrapper="border-none bg-transparent flex-1"
+            style={{
+              opacity: values.length > 0 ? 0 : 1,
+            }}
             hideIcon
           />
-          {!hideIcon && (
+          {!hideIcon && values.length < 1 && (
             <Icon
               type="caretDownAndUp"
               className="ml-2 shrink-0 translate-y-[3px] scale-[1.2] opacity-50"
@@ -165,7 +180,7 @@ export const MultiSelectAutocomplete = ({
           )}
         </div>
       </div>
-      <div className="absolute left-0 top-12 z-10 w-full">
+      <div className="absolute left-0 top-12 z-10 w-full" ref={itemListRef}>
         <div
           className={cn(
             "w-full cursor-pointer rounded-lg bg-secondary text-secondary-foreground outline-none animate-in fade-in-0 zoom-in-95",
