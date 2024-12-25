@@ -75,8 +75,8 @@ export const AutoComplete = ({
   const filteredOptions = options.filter(
     (option) =>
       !value?.includes(option.value) &&
-      inputValue &&
-      option.label.toLowerCase().includes(inputValue?.toLowerCase()),
+      (!inputValue ||
+        option.label.toLowerCase().includes(inputValue.toLowerCase())),
   );
 
   const rowVirtualizer = useVirtualizer({

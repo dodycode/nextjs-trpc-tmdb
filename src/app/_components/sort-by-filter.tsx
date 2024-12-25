@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQueryState } from "nuqs";
 
 import { AutoComplete } from "~/components/autocomplete";
@@ -11,6 +11,7 @@ import {
 } from "~/server/api/routers/tmdb/lib/enum";
 
 const SortByFilter: React.FC<{ type: "movie" | "tv" }> = ({ type }) => {
+  const [input, setInputValue] = useState("");
   const [sortBy, setSortBy] = useQueryState("sort_by");
 
   const options = useMemo(() => {
@@ -36,9 +37,9 @@ const SortByFilter: React.FC<{ type: "movie" | "tv" }> = ({ type }) => {
       placeholder="Sort by"
       classNameInput="cursor-pointer"
       value={sortBy ?? ""}
-      onValueChange={(value) => {
-        void setSortBy(value);
-      }}
+      inputValue={input}
+      onInputValueChange={setInputValue}
+      onValueChange={setSortBy}
       hideIcon
     />
   );
