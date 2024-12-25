@@ -3,7 +3,7 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Command as CommandPrimitive } from "cmdk";
 import type { KeyboardEvent } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -66,13 +66,18 @@ export const AutoComplete = ({
   onFocus,
   relativePopover = false,
 }: AutoCompleteProps) => {
-  const [filteredOptions, setFilteredOptions] = useState<Option[]>(options);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialRenderRef = useRef(true);
   const rowVirtualizerContainer = useRef<HTMLDivElement>(null);
 
   const [isOpen, setOpen] = useState(false);
-  const [input, setInput] = useState<string>(inputValue ?? "");
+
+  const filteredOptions = options.filter(
+    (option) =>
+      !value?.includes(option.value) &&
+      inputValue &&
+      option.label.toLowerCase().includes(inputValue?.toLowerCase()),
+  );
 
   const rowVirtualizer = useVirtualizer({
     count: filteredOptions?.length ?? 0,
@@ -81,16 +86,12 @@ export const AutoComplete = ({
     overscan: 5,
   });
 
-  // Sync input with inputValue prop
-  useEffect(() => {
-    setInput(inputValue ?? "");
-  }, [inputValue]);
-
   useEffect(() => {
     //If we clear value, we also need to clear input whenever it changes
     if (!value) {
-      setInput("");
+      onInputValueChange?.("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   // Update input when value exists in the first render
@@ -99,9 +100,10 @@ export const AutoComplete = ({
       const selectedOption = options.find((option) => option.value === value);
       if (selectedOption) {
         initialRenderRef.current = false;
-        setInput(selectedOption.label);
+        onInputValueChange?.(selectedOption.label);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, value]);
 
   useEffect(() => {
@@ -110,20 +112,6 @@ export const AutoComplete = ({
       initialRenderRef.current = true;
     };
   }, []);
-
-  // Make sure the options are loaded when it's still fetching
-  useEffect(() => {
-    if (isLoading) return;
-
-    setFilteredOptions(
-      options.filter((option) => {
-        if (!value) return true;
-
-        return option.value === value;
-      }),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, options]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
@@ -160,7 +148,6 @@ export const AutoComplete = ({
     if (value) {
       const selectedOption = options.find((option) => option.value === value);
       if (selectedOption) {
-        setInput(selectedOption.label);
         onInputValueChange?.(selectedOption.label);
       }
     }
@@ -176,25 +163,12 @@ export const AutoComplete = ({
     (selectedValue: string) => {
       const option = options.find((option) => option.value === selectedValue);
       if (option) {
-        setInput(option.label);
         onValueChange?.(selectedValue);
         onInputValueChange?.(option.label);
       }
       setOpen(false);
     },
     [onInputValueChange, onValueChange, options],
-  );
-
-  const handleSearch = useCallback(
-    (search: string) => {
-      // Compare with option label instead of value because the value can be different from the label
-      setFilteredOptions(
-        options.filter((option) =>
-          option.label.toLowerCase().includes(search.toLowerCase() ?? []),
-        ),
-      );
-    },
-    [options],
   );
 
   return (
@@ -223,11 +197,9 @@ export const AutoComplete = ({
         )}
         <CommandInput
           ref={inputRef}
-          value={input}
+          value={inputValue ?? ""}
           onValueChange={(value) => {
-            setInput(value);
             onInputValueChange?.(value);
-            handleSearch(value);
           }}
           onBlur={handleBlur}
           onFocus={() => {
@@ -258,12 +230,12 @@ export const AutoComplete = ({
       <div className="relative mt-1">
         <div
           className={cn(
-            "w-full cursor-pointer rounded-none bg-secondary text-secondary-foreground outline-none animate-in fade-in-0 zoom-in-95",
+            "w-full cursor-pointer rounded-lg bg-secondary text-secondary-foreground outline-none animate-in fade-in-0 zoom-in-95",
             isOpen ? "block" : "hidden",
             !relativePopover ? "absolute top-0 z-20" : "",
           )}
         >
-          <CommandList className="cursor-pointer rounded-none">
+          <CommandList className="cursor-pointer">
             {isLoading ? (
               <CommandPrimitive.Loading>
                 <div className="p-1">
@@ -273,6 +245,7 @@ export const AutoComplete = ({
             ) : filteredOptions.length > 0 ? (
               <CommandGroup
                 ref={rowVirtualizerContainer}
+                className="cursor-pointer"
                 style={{
                   maxHeight: "300px",
                   width: "100%",
@@ -280,6 +253,7 @@ export const AutoComplete = ({
                 }}
               >
                 <div
+                  className="cursor-pointer"
                   style={{
                     height: `${rowVirtualizer.getTotalSize()}px`,
                     width: "100%",
@@ -295,40 +269,41 @@ export const AutoComplete = ({
                       ? value === filteredOption.value
                       : false;
                     return (
-                      <CommandItem
+                      <div
+                        className="group relative cursor-pointer"
                         key={filteredOption.value}
-                        value={filteredOption.label}
-                        onMouseDown={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                        onSelect={() =>
-                          handleSelectOption(filteredOption.value)
-                        }
-                        className={cn(
-                          "flex w-full items-center gap-2",
-                          !isSelected ? "pl-8" : null,
-                        )}
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          width: "100%",
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start}px)`,
-                        }}
                       >
-                        {isSelected ? (
-                          <Icon type="check" className="w-5" />
-                        ) : null}
-                        {filteredOption.label}
-                      </CommandItem>
+                        <CommandItem
+                          value={filteredOption.label}
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }}
+                          onSelect={() =>
+                            handleSelectOption(filteredOption.value)
+                          }
+                          className="flex w-full items-center gap-2 group-hover:bg-primary group-hover:text-primary-foreground"
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: `${virtualRow.size}px`,
+                            transform: `translateY(${virtualRow.start}px)`,
+                          }}
+                        >
+                          {isSelected ? (
+                            <Icon type="check" className="w-5" />
+                          ) : null}
+                          {filteredOption.label}
+                        </CommandItem>
+                      </div>
                     );
                   })}
                 </div>
               </CommandGroup>
             ) : (
-              <CommandPrimitive.Empty className="select-none rounded-sm px-2 py-3 text-center text-base">
+              <CommandPrimitive.Empty className="select-none rounded-lg px-2 py-3 text-center text-base">
                 {emptyMessage}
               </CommandPrimitive.Empty>
             )}

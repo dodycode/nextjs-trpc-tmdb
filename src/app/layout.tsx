@@ -10,6 +10,7 @@ const inter = Inter({
 
 import { type Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
@@ -28,9 +29,11 @@ export default function RootLayout({
     <html lang="en" className={cn("dark font-sans", inter.variable)}>
       <body className="relative flex items-stretch pb-10 lg:pb-0">
         <TRPCReactProvider>
-          <NextTopLoader color="#fff" showSpinner={false} />
-          <Sider />
-          <main className="flex-grow">{children}</main>
+          <NuqsAdapter>
+            <NextTopLoader color="#fff" showSpinner={false} />
+            <Sider />
+            <main className="flex-grow">{children}</main>
+          </NuqsAdapter>
         </TRPCReactProvider>
       </body>
     </html>

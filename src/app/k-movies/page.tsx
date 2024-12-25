@@ -4,19 +4,29 @@ import { SearchInput } from "../_components/search-input";
 
 import { Container } from "~/components/container";
 import { KoreanMovieList } from "./_components/movies";
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient } from "~/trpc/server";
 import { Suspense } from "react";
 import { ShowsSkeleton } from "../_components/shows-skeleton";
+import type { SearchParams } from "~/types/search-params";
+import { prefetchDiscover } from "~/lib/prefetch-discover";
 
 export const fetchCache = "default-cache";
 // after 1 day
 export const revalidate = 86400;
 
-export default async function KMovies() {
-  await api.tmdb.discover.prefetchInfinite({
-    type: "movie",
-    cursor: 1,
-  });
+export default async function KMovies({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const urlParams = await searchParams;
+
+  const sortBy = urlParams.sort_by ?? "popularity.desc";
+  const genres = urlParams.genres
+    ? urlParams.genres.split("|").map(Number).filter(Boolean)
+    : [];
+
+  await prefetchDiscover(sortBy, genres, "movie");
 
   return (
     <HydrateClient>
@@ -24,7 +34,7 @@ export default async function KMovies() {
         <SearchInput />
         <div className="flex flex-col gap-6">
           <PageHeader title="K-Movies">
-            <Filters />
+            <Filters type="movie" />
           </PageHeader>
           <Suspense fallback={<ShowsSkeleton />}>
             <KoreanMovieList />

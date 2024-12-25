@@ -10,6 +10,7 @@ import {
 } from "~/components/ui/command";
 import { Icon, type IconType } from "./icons";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 export interface MultiSelectOption {
   label: string;
@@ -50,25 +51,7 @@ export const MultiSelectAutocomplete = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
-  const handleSelect = useCallback(
-    (selectedValue: string) => {
-      if (!values.includes(selectedValue)) {
-        onValuesChange([...values, selectedValue]);
-      }
-      setInputValue("");
-      setOpen(false);
-      inputRef.current?.blur();
-    },
-    [values, onValuesChange],
-  );
-
-  const handleRemove = useCallback(
-    (valueToRemove: string) => {
-      onValuesChange(values.filter((v) => v !== valueToRemove));
-    },
-    [values, onValuesChange],
-  );
+  const rowVirtualizerContainer = useRef<HTMLDivElement>(null);
 
   const filteredOptions = options.filter(
     (option) =>
@@ -76,15 +59,48 @@ export const MultiSelectAutocomplete = ({
       option.label.toLowerCase().includes(inputValue.toLowerCase()),
   );
 
+  const rowVirtualizer = useVirtualizer({
+    count: filteredOptions?.length ?? 0,
+    getScrollElement: () => rowVirtualizerContainer.current,
+    estimateSize: () => 44,
+    overscan: 5,
+  });
+
+  const handleSelect = useCallback(
+    (selectedValue: string) => {
+      if (!values.includes(selectedValue)) {
+        onValuesChange([...values, selectedValue]);
+      }
+      // Clear input and focus to open the dropdown
+      // This is a hacky way to detect blur
+      setInputValue("");
+      inputRef.current?.focus();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [values],
+  );
+
+  const handleRemove = useCallback(
+    (valueToRemove: string) => {
+      onValuesChange(values.filter((v) => v !== valueToRemove));
+      inputRef.current?.focus();
+    },
+    [values, onValuesChange],
+  );
+
   return (
-    <div className={cn("relative", className)}>
+    <CommandPrimitive
+      className={cn("relative", className)}
+      shouldFilter={false}
+    >
       <div
         className={cn(
-          "flex h-11 flex-wrap items-center gap-2 rounded-lg bg-secondary px-[12px] py-[8px] text-secondary-foreground",
+          "relative",
+          "flex h-11 flex-nowrap items-center gap-2 overflow-hidden rounded-lg bg-secondary px-[12px] py-[8px] text-secondary-foreground",
           classNameInputWrapper,
         )}
         onClick={() => {
-          setOpen(true);
+          inputRef.current?.focus();
         }}
         onBlur={() => {
           setOpen(false);
@@ -124,68 +140,109 @@ export const MultiSelectAutocomplete = ({
             </Badge>
           );
         })}
-        <CommandPrimitive className="flex-1" shouldFilter={false}>
-          <div className="flex items-center">
-            <CommandInput
-              ref={inputRef}
-              value={inputValue}
-              onValueChange={setInputValue}
-              onBlur={() => {
-                setOpen(false);
-                onBlur?.();
-              }}
-              onFocus={() => setOpen(true)}
-              placeholder={placeholder}
-              disabled={disabled}
-              className="h-auto flex-1 bg-transparent py-0 outline-none"
-              classNameInputWrapper="border-none bg-transparent flex-1"
-              hideIcon
+
+        <div className="flex items-center">
+          <CommandInput
+            ref={inputRef}
+            value={inputValue}
+            onValueChange={setInputValue}
+            onBlur={() => {
+              setOpen(false);
+              onBlur?.();
+            }}
+            onFocus={() => setOpen(true)}
+            placeholder={placeholder}
+            disabled={disabled}
+            className="h-auto flex-1 bg-transparent py-0 outline-none"
+            classNameInputWrapper="border-none bg-transparent flex-1"
+            hideIcon
+          />
+          {!hideIcon && (
+            <Icon
+              type="caretDownAndUp"
+              className="ml-2 shrink-0 translate-y-[3px] scale-[1.2] opacity-50"
             />
-            {!hideIcon && (
-              <Icon
-                type="caretDownAndUp"
-                className="ml-2 shrink-0 translate-y-[3px] scale-[1.2] opacity-50"
-              />
-            )}
-          </div>
-          {open && (
-            <CommandList className="absolute left-0 top-full z-20 mt-1 w-full rounded-none bg-secondary text-secondary-foreground shadow-md outline-none animate-in">
-              {isLoading ? (
-                <CommandGroup>
-                  <Skeleton className="h-8 w-full" />
-                </CommandGroup>
-              ) : null}
-              {filteredOptions.length > 0 && !isLoading ? (
-                <CommandGroup>
-                  {filteredOptions.map((option) => (
-                    <CommandItem
-                      key={option.value}
-                      value={option.value}
-                      onSelect={() => handleSelect(option.value)}
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                      }}
-                    >
-                      {option.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ) : null}
-              {!isLoading && filteredOptions.length === 0 ? (
-                <CommandGroup>
-                  <CommandItem
-                    className="select-none rounded-sm px-2 py-3 text-center text-base"
-                    disabled
-                  >
-                    {emptyMessage}
-                  </CommandItem>
-                </CommandGroup>
-              ) : null}
-            </CommandList>
           )}
-        </CommandPrimitive>
+        </div>
       </div>
-    </div>
+      <div className="absolute left-0 top-12 w-full">
+        <div
+          className={cn(
+            "w-full cursor-pointer rounded-lg bg-secondary text-secondary-foreground outline-none animate-in fade-in-0 zoom-in-95",
+            open ? "block" : "hidden",
+          )}
+        >
+          <CommandList className="cursor-pointer">
+            {isLoading ? (
+              <CommandPrimitive.Loading>
+                <div className="p-1">
+                  <Skeleton className="h-8 w-full" />
+                </div>
+              </CommandPrimitive.Loading>
+            ) : filteredOptions.length > 0 ? (
+              <CommandGroup
+                ref={rowVirtualizerContainer}
+                className="cursor-pointer"
+                style={{
+                  maxHeight: "300px",
+                  width: "100%",
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  className="cursor-pointer"
+                  style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: "100%",
+                    position: "relative",
+                  }}
+                >
+                  {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const filteredOption = filteredOptions[virtualRow.index];
+
+                    if (!filteredOption) return null;
+
+                    const isSelected = values.includes(filteredOption.value);
+                    return (
+                      <div
+                        className="group relative cursor-pointer"
+                        key={filteredOption.value}
+                      >
+                        <CommandItem
+                          value={filteredOption.label}
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }}
+                          onSelect={() => handleSelect(filteredOption.value)}
+                          className="flex w-full items-center gap-2 group-hover:bg-primary group-hover:text-primary-foreground"
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: `${virtualRow.size}px`,
+                            transform: `translateY(${virtualRow.start}px)`,
+                          }}
+                        >
+                          {isSelected ? (
+                            <Icon type="check" className="w-5" />
+                          ) : null}
+                          {filteredOption.label}
+                        </CommandItem>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CommandGroup>
+            ) : (
+              <CommandPrimitive.Empty className="select-none rounded-lg px-2 py-3 text-center text-base">
+                {emptyMessage}
+              </CommandPrimitive.Empty>
+            )}
+          </CommandList>
+        </div>
+      </div>
+    </CommandPrimitive>
   );
 };

@@ -6,6 +6,7 @@ import {
 } from "next-cloudinary";
 import { cn } from "~/lib/utils";
 import { Skeleton } from "./ui/skeleton";
+import Image from "next/image";
 
 const CldImage = (
   props: CldImageProps & {
@@ -15,9 +16,26 @@ const CldImage = (
 ) => {
   const [isLoading, setIsLoading] = useState(true);
 
+  if (props.src.includes("placehold.co")) {
+    return (
+      <Image
+        ref={props.ref}
+        src={props.src}
+        alt={props.alt}
+        className={cn(
+          props.className,
+          "transition-opacity duration-300 ease-in-out",
+        )}
+        fill={props.fill}
+        sizes={props.sizes}
+        unoptimized
+      />
+    );
+  }
+
   return (
     <>
-      {props.showloading && <Skeleton className="h-full w-full" />}
+      {props.showloading && isLoading && <Skeleton className="h-full w-full" />}
       <CldImageDefault
         ref={props.ref}
         className={cn(
@@ -29,7 +47,6 @@ const CldImage = (
         }}
         onLoad={() => setIsLoading(false)}
         deliveryType="fetch"
-        unoptimized={props.src.includes("placehold.co")}
         {...props}
       />
     </>

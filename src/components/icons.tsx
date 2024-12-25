@@ -9,6 +9,8 @@ import {
   TvIcon,
   ClapperboardIcon,
   XIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 
@@ -24,6 +26,8 @@ const icons = {
   clapperBoard: ClapperboardIcon,
   caretDownAndUp: CaretDownAndUpIcon,
   close: XIcon,
+  arrowLeft: ArrowLeftIcon,
+  arrowRight: ArrowRightIcon,
 } as const;
 
 export type IconType = keyof typeof icons;
