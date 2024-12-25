@@ -67,7 +67,7 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
   }, [movieImages, movieDetails, isLoadingMovieImages, isLoadingMovieDetails]);
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-center gap-4 px-4 pb-0 pt-20 lg:max-w-[30vw] lg:pb-10">
+    <div className="relative flex h-full w-full flex-col justify-center gap-4 px-4 pb-0 pt-20 lg:max-w-[30vw] lg:justify-end lg:pb-10">
       {content.logoPath ? (
         <TooltipProvider delayDuration={0}>
           <Tooltip>
