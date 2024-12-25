@@ -143,7 +143,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
   ]);
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden">
+    <div className="relative h-screen w-full overflow-hidden">
       {videoURL && !isMobile && (
         <div
           className="absolute left-0 top-0 aspect-video h-full w-full"
@@ -174,7 +174,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({ type, id }) => {
           src={`${baseURL}${fallbackContent.backdropPath}`}
           alt={`${fallbackContent.title} backdrop`}
           className="object-cover object-center"
-          quality={100}
+          quality={90}
           fill
           sizes="(max-width: 480px) 400px, (max-width: 768px) 600px, (max-width: 1024px) 800px, 100vw"
         />

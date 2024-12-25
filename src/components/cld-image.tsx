@@ -47,6 +47,7 @@ const CldImage = (
         }}
         onLoad={() => setIsLoading(false)}
         deliveryType="fetch"
+        format="webp"
         {...props}
       />
     </>

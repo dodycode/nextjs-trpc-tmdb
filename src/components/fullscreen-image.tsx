@@ -96,7 +96,7 @@ export const FullscreenImage: React.FC<FullscreenImageProps> = ({
             sizes="(max-width: 768px) 400px, (max-width: 1024px) 500px, 500px"
             className="object-contain"
             priority={true}
-            quality={100}
+            quality={90}
             showloading="true"
           />
         </motion.div>

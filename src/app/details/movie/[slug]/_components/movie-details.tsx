@@ -10,7 +10,7 @@ export type MovieDetailsProp = {
 
 const MovieDetails: React.FC<MovieDetailsProp> = ({ movieId }) => {
   return (
-    <Container className="flex flex-col gap-20 px-0 lg:px-0 lg:pl-20">
+    <Container className="flex flex-col px-0 lg:gap-20 lg:px-0 lg:pl-20">
       <Jumbotron type="movie" id={movieId} />
       <DetailsTabs type="movie" id={movieId} />
     </Container>
