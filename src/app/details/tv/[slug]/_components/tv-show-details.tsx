@@ -10,7 +10,7 @@ export type TVShowDetailsProp = {
 
 const TVShowDetails: React.FC<TVShowDetailsProp> = ({ movieId }) => {
   return (
-    <Container className="flex flex-col gap-20 px-0 lg:px-0 lg:pl-20">
+    <Container className="flex flex-col px-0 lg:gap-20 lg:px-0 lg:pl-20">
       <Jumbotron type="tv" id={movieId} />
       <DetailsTabs type="tv" id={movieId} />
     </Container>

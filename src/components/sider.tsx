@@ -37,7 +37,7 @@ export function Sider() {
         "group z-50 flex h-auto w-full flex-col items-center justify-center bg-secondary py-3 transition-all duration-300",
         "fixed bottom-0 left-0 top-[unset] lg:bottom-[unset] lg:top-0 lg:h-screen lg:w-20 lg:bg-transparent",
         "py-4 lg:py-0",
-        isMobile && isScrolled ? "translate-y-10" : "translate-y-0",
+        isMobile && isScrolled ? "translate-y-14" : "translate-y-0",
       )}
     >
       {!isMobile && (

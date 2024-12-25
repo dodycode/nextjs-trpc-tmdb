@@ -67,7 +67,7 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
   }, [movieImages, movieDetails, isLoadingMovieImages, isLoadingMovieDetails]);
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-end gap-4 px-4 pb-10 lg:max-w-[30vw]">
+    <div className="relative flex h-full w-full flex-col justify-center gap-4 px-4 pb-0 pt-20 lg:max-w-[30vw] lg:pb-10">
       {content.logoPath ? (
         <TooltipProvider delayDuration={0}>
           <Tooltip>
@@ -77,7 +77,7 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
                 alt={content.title}
                 width={300}
                 height={100}
-                quality={100}
+                quality={80}
                 sizes="(max-width: 768px) 300px, (max-width: 1024px) 300px, 300px"
               />
             </TooltipTrigger>
@@ -91,9 +91,9 @@ const JumbotronContent: React.FC<JumbotronProps> = ({ type, id }) => {
       )}
 
       <JumbotronMetadata type={type} id={id} />
-      <div className="min-h-6">
-        <p>{content.overview}</p>
-      </div>
+      <p className="line-clamp-3 min-h-6 overflow-hidden lg:line-clamp-4">
+        {content.overview}
+      </p>
       <span className="font-bold">{content.genres}</span>
       <div className="flex items-stretch gap-4">
         <JumbotronTrailerModal id={id} type={type} />
