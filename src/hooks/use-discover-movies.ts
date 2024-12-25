@@ -14,6 +14,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
       .withOptions({ clearOnDefault: true }),
   );
   const [debouncedGenres] = useDebounce(genres, 1000);
+  const [debouncedSortBy] = useDebounce(sortBy, 1000);
 
   // Infinite Scroll
   const {
@@ -23,7 +24,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
     hasNextPage,
     fetchNextPage,
   } = api.tmdb.discover.useInfiniteQuery(
-    { type, sortBy, genres: debouncedGenres },
+    { type, sortBy: debouncedSortBy, genres: debouncedGenres },
     {
       getNextPageParam: (lastPage) => {
         if (lastPage.page < lastPage.total_pages) {
@@ -31,7 +32,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
         }
         return null;
       },
-      enabled: !!type || !!debouncedGenres,
+      enabled: !!type || !!debouncedGenres || !!debouncedSortBy,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
