@@ -3,14 +3,14 @@ import { Filters } from "./_components/filters";
 import { DiscoverShows } from "./_components/discover-shows";
 import { SearchInput } from "./_components/search-input";
 import { Container } from "~/components/container";
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient } from "~/trpc/server";
+import { prefetchDiscover } from "~/lib/prefetch-discover";
+import type { SearchParams } from "~/types/search-params";
 
 // stale while revalidate
 export const fetchCache = "default-cache";
 // after 1 day
 export const revalidate = 86400;
-
-type SearchParams = Promise<Record<string, string | undefined>>;
 
 export default async function Home({
   searchParams,
@@ -19,14 +19,12 @@ export default async function Home({
 }) {
   const urlParams = await searchParams;
 
-  await api.tmdb.discover.prefetchInfinite({
-    type: "tv",
-    cursor: 1,
-    sortBy: urlParams.sort_by,
-    genres: urlParams.genres
-      ? urlParams.genres.split("|").map(Number).filter(Boolean)
-      : undefined,
-  });
+  const sortBy = urlParams.sort_by ?? "popularity.desc";
+  const genres = urlParams.genres
+    ? urlParams.genres.split("|").map(Number).filter(Boolean)
+    : [];
+
+  await prefetchDiscover(sortBy, genres, "tv");
 
   return (
     <HydrateClient>

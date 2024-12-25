@@ -1,6 +1,8 @@
 import { AutoComplete } from "~/components/autocomplete";
 
 const SearchInput: React.FC = () => {
+  // Todo: implement search
+
   return (
     <AutoComplete
       className="h-16 w-full"
