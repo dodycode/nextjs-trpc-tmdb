@@ -1,5 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import {
+  MovieSortByEnum,
+  TVShowsSortByEnum,
+} from "~/server/api/routers/tmdb/lib/enum";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -48,4 +52,16 @@ export function generateVideoEmbedUrl(site: string, key: string) {
       console.warn(`Unsupported video site: ${site}`);
       return null;
   }
+}
+
+export function getLabelFromSortbyEnums(value: string) {
+  const [text, order] = value.split(".");
+  if (!text || !order) return value;
+  const capitalizedText = text
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  const capitalizedOrder = order.charAt(0).toUpperCase() + order.slice(1);
+  return `${capitalizedText} (${capitalizedOrder})`;
 }

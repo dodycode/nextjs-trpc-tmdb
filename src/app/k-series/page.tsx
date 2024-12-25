@@ -24,7 +24,7 @@ export default async function KSeries() {
         <SearchInput />
         <div className="flex flex-col gap-6">
           <PageHeader title="K-Series">
-            <Filters />
+            <Filters type="tv" />
           </PageHeader>
           <Suspense fallback={<ShowsSkeleton />}>
             <KoreanTVShowList />

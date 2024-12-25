@@ -6,6 +6,7 @@ import {
 } from "next-cloudinary";
 import { cn } from "~/lib/utils";
 import { Skeleton } from "./ui/skeleton";
+import Image from "next/image";
 
 const CldImage = (
   props: CldImageProps & {
@@ -14,6 +15,23 @@ const CldImage = (
   },
 ) => {
   const [isLoading, setIsLoading] = useState(true);
+
+  if (props.src.includes("placehold.co")) {
+    return (
+      <Image
+        ref={props.ref}
+        src={props.src}
+        alt={props.alt}
+        className={cn(
+          props.className,
+          "transition-opacity duration-300 ease-in-out",
+        )}
+        fill={props.fill}
+        sizes={props.sizes}
+        unoptimized
+      />
+    );
+  }
 
   return (
     <>
@@ -29,7 +47,6 @@ const CldImage = (
         }}
         onLoad={() => setIsLoading(false)}
         deliveryType="fetch"
-        unoptimized={props.src.includes("placehold.co")}
         {...props}
       />
     </>

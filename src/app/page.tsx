@@ -10,10 +10,19 @@ export const fetchCache = "default-cache";
 // after 1 day
 export const revalidate = 86400;
 
-export default async function Home() {
+type SearchParams = Promise<Record<string, string | undefined>>;
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const urlParams = await searchParams;
+
   await api.tmdb.discover.prefetchInfinite({
     type: "tv",
     cursor: 1,
+    sortBy: urlParams.sort_by,
   });
 
   return (
@@ -22,7 +31,7 @@ export default async function Home() {
         <SearchInput />
         <div className="flex flex-col gap-6">
           <PageHeader title="Discover">
-            <Filters />
+            <Filters type="tv" />
           </PageHeader>
           <DiscoverShows />
         </div>
