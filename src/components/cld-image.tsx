@@ -17,7 +17,7 @@ const CldImage = (
 
   return (
     <>
-      {props.showloading && <Skeleton className="h-full w-full" />}
+      {props.showloading && isLoading && <Skeleton className="h-full w-full" />}
       <CldImageDefault
         ref={props.ref}
         className={cn(
