@@ -31,7 +31,7 @@ const useDiscoverMovies = cache((type: "movie" | "tv") => {
         }
         return null;
       },
-      enabled: !!type || !!sortBy,
+      enabled: !!type || !!debouncedGenres,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
