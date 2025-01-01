@@ -8,7 +8,7 @@ const Actors: React.FC = () => {
   const { data: actors, isLoading } = api.tmdb.people.useQuery();
 
   useEffect(() => {
-    console.log("actors", actors);
+    console.log("actors:", actors);
   }, [actors, isLoading]);
 
   return (
