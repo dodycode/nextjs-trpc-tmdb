@@ -1,3 +1,7 @@
+export const dynamic = "force-dynamic";
+export const maxDuration = 60; // This function can run for a maximum of 60 seconds
+export const revalidate = 300; // revalidate at most every 5 minutes
+
 import { PageHeader } from "~/components/page-header";
 import { SearchInput } from "../_components/search-input";
 
@@ -6,6 +10,7 @@ import { Actors } from "./_components/actors";
 
 async function importInstaller() {
   try {
+    console.log("Installing Puppeteer");
     return await import("puppeteer/internal/node/install.js");
   } catch {
     console.warn(
