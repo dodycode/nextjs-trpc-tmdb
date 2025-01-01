@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Browser } from "puppeteer";
 import chromium from "@sparticuz/chromium";
 
 import { publicProcedure } from "../../trpc";
@@ -11,20 +11,29 @@ chromium.setGraphicsMode = false;
 export const peopleHandler = publicProcedure
   .input(PeopleHandlerSchema)
   .query(async ({ input }) => {
-    const browser = await puppeteer.launch({
-      args: [
-        "--use-gl=angle",
-        "--use-angle=swiftshader",
-        "--single-process",
-        "--no-sandbox",
-      ],
-      headless: chromium.headless,
-      executablePath:
-        env.NODE_ENV === "development"
-          ? env.PUPPETEER_CACHE_DIR
-          : await chromium.executablePath(),
-      defaultViewport: chromium.defaultViewport,
-    });
+    let browser: Browser;
+
+    if (env.NODE_ENV === "production") {
+      const executablePath = await chromium.executablePath(
+        "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar",
+      );
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        headless: chromium.headless,
+        executablePath,
+        defaultViewport: chromium.defaultViewport,
+      });
+    } else {
+      browser = await puppeteer.launch({
+        args: [
+          "--use-gl=angle",
+          "--use-angle=swiftshader",
+          "--single-process",
+          "--no-sandbox",
+        ],
+        headless: true,
+      });
+    }
     const page = await browser.newPage();
 
     try {
