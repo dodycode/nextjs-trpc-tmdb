@@ -2,10 +2,22 @@
 
 import { useEffect } from "react";
 import { Alert, AlertDescription } from "~/components/ui/alert";
-import { api } from "~/trpc/react";
+import { api, type RouterOutputs } from "~/trpc/react";
 
-const Actors: React.FC = () => {
-  const { data: actors, isLoading } = api.tmdb.people.useQuery();
+const Actors: React.FC<{ initialData: RouterOutputs["tmdb"]["people"] }> = ({
+  initialData,
+}) => {
+  const { data: actors, isLoading } = api.tmdb.people.useQuery(
+    { cursor: 1 },
+    {
+      initialData,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      // max-age one month
+      staleTime: 30 * 24 * 60 * 60 * 1000,
+    },
+  );
 
   useEffect(() => {
     console.log("actors:", actors);

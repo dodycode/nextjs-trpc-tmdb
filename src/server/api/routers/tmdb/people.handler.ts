@@ -4,7 +4,6 @@ import { publicProcedure } from "../../trpc";
 import { PeopleHandlerSchema } from "./people.schema";
 
 export const peopleHandler = publicProcedure
-  .output(Array)
   .input(PeopleHandlerSchema)
   .query(async ({ input }) => {
     const browser = await puppeteer.launch({
