@@ -165,6 +165,15 @@ const seasonResult = z.object({
   vote_average: z.number().default(0),
 });
 
+const peopleResult = z.object({
+  name: z.string().nullable(),
+  image: z.string().nullable(),
+  url: z.string().nullable(),
+  nationality: z.string().nullable(),
+  bio: z.string().nullable(),
+  likes: z.string().nullable(),
+});
+
 export const DiscoverResponse = z.object({
   page: z.number(),
   results: z.array(MediaResult),
@@ -250,4 +259,11 @@ export const movieDetailsResponse = z.object({
   revenue: z.number().optional(),
   runtime: z.number().optional(),
   video: z.boolean().optional(),
+});
+
+export const peopleDiscoverResponse = z.object({
+  page: z.number(),
+  results: z.array(peopleResult),
+  total_results: z.number(),
+  total_pages: z.number(),
 });
