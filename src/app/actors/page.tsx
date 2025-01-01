@@ -8,26 +8,7 @@ import { Container } from "~/components/container";
 import { Actors } from "./_components/actors";
 import { api, HydrateClient } from "~/trpc/server";
 
-async function importInstaller() {
-  try {
-    console.log("Installing Puppeteer");
-    return await import("puppeteer/internal/node/install.js");
-  } catch {
-    console.warn(
-      "Skipping browser installation because the Puppeteer build is not available. Run `npm install` again after you have re-built Puppeteer.",
-    );
-    process.exit(0);
-  }
-}
-
 export default async function ActorsPage() {
-  try {
-    const { downloadBrowsers } = await importInstaller();
-    await downloadBrowsers();
-  } catch (error) {
-    console.warn("Browser download failed", error);
-  }
-
   const actors = await api.tmdb.people({ cursor: 1 });
 
   return (
