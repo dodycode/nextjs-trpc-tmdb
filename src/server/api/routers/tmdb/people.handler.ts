@@ -1,4 +1,5 @@
-import { chromium } from "playwright";
+import puppeteer from "puppeteer";
+
 import { publicProcedure } from "../../trpc";
 import { PeopleHandlerSchema } from "./people.schema";
 
@@ -6,7 +7,15 @@ export const peopleHandler = publicProcedure
   .output(Array)
   .input(PeopleHandlerSchema)
   .query(async ({ input }) => {
-    const browser = await chromium.launch();
+    const browser = await puppeteer.launch({
+      args: [
+        "--use-gl=angle",
+        "--use-angle=swiftshader",
+        "--single-process",
+        "--no-sandbox",
+      ],
+      headless: true,
+    });
     const page = await browser.newPage();
 
     try {
