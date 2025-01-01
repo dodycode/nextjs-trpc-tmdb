@@ -1,7 +1,12 @@
 import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium";
 
 import { publicProcedure } from "../../trpc";
 import { PeopleHandlerSchema } from "./people.schema";
+import { env } from "~/env";
+
+chromium.setHeadlessMode = true;
+chromium.setGraphicsMode = false;
 
 export const peopleHandler = publicProcedure
   .input(PeopleHandlerSchema)
@@ -13,7 +18,12 @@ export const peopleHandler = publicProcedure
         "--single-process",
         "--no-sandbox",
       ],
-      headless: true,
+      headless: chromium.headless,
+      executablePath:
+        env.NODE_ENV === "development"
+          ? env.PUPPETEER_CACHE_DIR
+          : await chromium.executablePath(),
+      defaultViewport: chromium.defaultViewport,
     });
     const page = await browser.newPage();
 
