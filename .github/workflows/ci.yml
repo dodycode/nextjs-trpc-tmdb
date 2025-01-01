@@ -28,7 +28,6 @@ jobs:
         run: |
           echo "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> .env
           echo "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}" >> .env
-          echo "PUPPETEER_DOWNLOAD_BASE_URL=${{ secrets.PUPPETEER_DOWNLOAD_BASE_URL }}" >> .env
           echo "PUPPETEER_CACHE_DIR=${{ secrets.PUPPETEER_CACHE_DIR }}" >> .env
 
       - name: Check
@@ -46,7 +45,6 @@ jobs:
         run: |
           echo "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> .env
           echo "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}" >> .env
-          echo "PUPPETEER_DOWNLOAD_BASE_URL=${{ secrets.PUPPETEER_DOWNLOAD_BASE_URL }}" >> .env
           echo "PUPPETEER_CACHE_DIR=${{ secrets.PUPPETEER_CACHE_DIR }}" >> .env
 
       - name: Typecheck

@@ -9,7 +9,6 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     TMDB_API_KEY: z.string().min(1),
-    PUPPETEER_DOWNLOAD_BASE_URL: z.string().min(1),
     PUPPETEER_CACHE_DIR: z.string().min(1),
   },
 
@@ -33,7 +32,6 @@ export const env = createEnv({
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    PUPPETEER_DOWNLOAD_BASE_URL: process.env.PUPPETEER_DOWNLOAD_BASE_URL,
     PUPPETEER_CACHE_DIR: process.env.PUPPETEER_CACHE_DIR,
   },
   /**
