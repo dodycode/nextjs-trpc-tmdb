@@ -1,23 +1,21 @@
-import puppeteer, { Browser } from "puppeteer";
-import chromium from "@sparticuz/chromium";
+import puppeteer, { type Browser } from "puppeteer";
+import puppeteerCore, { type Browser as BrowserCore } from "puppeteer-core";
+import chromium from "@sparticuz/chromium-min";
 
 import { publicProcedure } from "../../trpc";
 import { PeopleHandlerSchema } from "./people.schema";
 import { env } from "~/env";
 
-chromium.setHeadlessMode = true;
-chromium.setGraphicsMode = false;
-
 export const peopleHandler = publicProcedure
   .input(PeopleHandlerSchema)
   .query(async ({ input }) => {
-    let browser: Browser;
+    let browser: Browser | BrowserCore;
 
     if (env.NODE_ENV === "production") {
       const executablePath = await chromium.executablePath(
         "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar",
       );
-      browser = await puppeteer.launch({
+      browser = await puppeteerCore.launch({
         args: chromium.args,
         headless: chromium.headless,
         executablePath,
@@ -42,22 +40,25 @@ export const peopleHandler = publicProcedure
       );
       await page.waitForSelector(".box");
 
-      const actors = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll(".box"))
-          .map((box) => ({
-            name: box.querySelector(".title a")?.textContent ?? "",
-            image: box.querySelector(".cover img")?.getAttribute("src") ?? "",
-            url: box.querySelector(".title a")?.getAttribute("href") ?? "",
-            nationality:
-              box.querySelector(".text-muted .spacer")?.textContent?.trim() ??
-              "",
-            bio: box.querySelector(".content p")?.textContent?.trim() ?? "",
-            likes: box.querySelector(".like-cntb")?.textContent?.trim() ?? "0",
-          }))
-          .filter(
-            (actor) => actor.name && actor.nationality === "South Korean",
-          );
-      });
+      // @ts-expect-error - type issue
+      const actors = (await page.evaluate(() => {
+        return Array.from(document.querySelectorAll(".box")).map((box) => ({
+          name: box.querySelector(".title a")?.textContent ?? "",
+          image: box.querySelector(".cover img")?.getAttribute("src") ?? "",
+          url: box.querySelector(".title a")?.getAttribute("href") ?? "",
+          nationality:
+            box.querySelector(".text-muted .spacer")?.textContent?.trim() ?? "",
+          bio: box.querySelector(".content p")?.textContent?.trim() ?? "",
+          likes: box.querySelector(".like-cntb")?.textContent?.trim() ?? "0",
+        }));
+      })) as {
+        name: string;
+        image: string;
+        url: string;
+        nationality: string;
+        bio: string;
+        likes: string;
+      }[];
 
       return actors;
     } catch (error) {
