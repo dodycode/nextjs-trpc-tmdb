@@ -4,6 +4,7 @@ import { movieCreditsHandler } from "./movieCredits.handler";
 import { movieDetailsHeandler } from "./movieDetails.handler";
 import { movieImagesHandler } from "./movieImages.handler";
 import { movieVideosHandler } from "./movieVideos.handler";
+import { peopleHandler } from "./people.handler";
 import { searchHandler } from "./search.handler";
 
 export const tmdbRouter = createTRPCRouter({
@@ -13,4 +14,5 @@ export const tmdbRouter = createTRPCRouter({
   movieImages: movieImagesHandler,
   movieVideos: movieVideosHandler,
   search: searchHandler,
+  people: peopleHandler,
 });
