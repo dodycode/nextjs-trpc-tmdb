@@ -1,4 +1,4 @@
-export const maxDuration = 60; // This function can run for a maximum of 60 seconds
+export const fetchCache = "default-cache";
 // after 1 month
 export const revalidate = 2628000;
 

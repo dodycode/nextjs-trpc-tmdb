@@ -165,7 +165,7 @@ const seasonResult = z.object({
   vote_average: z.number().default(0),
 });
 
-const peopleResult = z.object({
+export const peopleResult = z.object({
   name: z.string().nullable(),
   image: z.string().nullable(),
   url: z.string().nullable(),
