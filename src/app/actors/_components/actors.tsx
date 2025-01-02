@@ -40,6 +40,8 @@ const Actors: React.FC<Props> = ({ initialData }) => {
         );
       },
       enabled: !!page,
+      // max-age one month
+      staleTime: 2628000_000,
     },
   );
 
