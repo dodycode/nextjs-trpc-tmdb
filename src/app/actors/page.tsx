@@ -7,8 +7,6 @@ import { SearchInput } from "../_components/search-input";
 
 import { Container } from "~/components/container";
 import { api, HydrateClient } from "~/trpc/server";
-import { Suspense } from "react";
-import { ActorsSkeleton } from "./_components/actors-skeleton";
 import { Actors } from "./_components/actors";
 
 export default async function ActorsPage() {
@@ -20,9 +18,7 @@ export default async function ActorsPage() {
         <SearchInput />
         <div className="flex flex-col gap-6">
           <PageHeader title="Popular People" />
-          <Suspense fallback={<ActorsSkeleton />}>
-            <Actors initialData={actors} />
-          </Suspense>
+          <Actors initialData={actors} />
         </div>
       </Container>
     </HydrateClient>
