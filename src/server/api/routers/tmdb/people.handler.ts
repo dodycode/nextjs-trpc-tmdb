@@ -18,8 +18,16 @@ export const peopleHandler = publicProcedure
         "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar",
       );
       browser = await puppeteerCore.launch({
-        args: chromium.args,
-        headless: chromium.headless,
+        args: [
+          ...chromium.args,
+          "--use-gl=angle",
+          "--use-angle=swiftshader",
+          "--single-process",
+          "--no-sandbox",
+          "--proxy-server='direct://'",
+          "--proxy-bypass-list=*",
+        ],
+        headless: true,
         executablePath,
         defaultViewport: chromium.defaultViewport,
       });
@@ -30,11 +38,17 @@ export const peopleHandler = publicProcedure
           "--use-angle=swiftshader",
           "--single-process",
           "--no-sandbox",
+          "--proxy-server='direct://'",
+          "--proxy-bypass-list=*",
         ],
         headless: true,
       });
     }
     const page = await browser.newPage();
+
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+    );
 
     try {
       await page.goto(
