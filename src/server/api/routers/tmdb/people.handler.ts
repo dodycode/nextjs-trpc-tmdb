@@ -1,18 +1,22 @@
-import puppeteer, { type Browser } from "puppeteer";
+import puppeteer, { type Page, type Browser } from "puppeteer";
 import puppeteerCore, { type Browser as BrowserCore } from "puppeteer-core";
 import chromium from "@sparticuz/chromium-min";
 
 import { publicProcedure } from "../../trpc";
 import { PeopleHandlerSchema } from "./people.schema";
 import { env } from "~/env";
+import { autoScroll } from "./lib/utils";
 
+// todo: handle infinite scroll
 export const peopleHandler = publicProcedure
   .input(PeopleHandlerSchema)
   .query(async ({ input }) => {
     let browser: Browser | BrowserCore;
 
     if (env.NODE_ENV === "production") {
-      const executablePath = await chromium.executablePath();
+      const executablePath = await chromium.executablePath(
+        "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar",
+      );
       browser = await puppeteerCore.launch({
         args: chromium.args,
         headless: chromium.headless,
@@ -37,6 +41,10 @@ export const peopleHandler = publicProcedure
         `https://mydramalist.com/people/top?page=${input?.cursor ?? 1}`,
       );
       await page.waitForSelector(".box");
+
+      await autoScroll(page as Page);
+
+      await page.waitForSelector("img.loaded");
 
       // @ts-expect-error - type issue
       const actors = (await page.evaluate(() => {

@@ -11,16 +11,18 @@ import { useMovieDetailsContext } from "../_context/details-provider";
 
 const baseURL = "https://image.tmdb.org/t/p/w200";
 
-const Cast: React.FC<{
+export const Cast: React.FC<{
   alt: string;
   src: string;
   name: string;
-  job: string;
+  job?: string;
 }> = ({ alt, src, name, job }) => {
   if (!src) {
     src = "https://placehold.co/128x128.png?text=No+Image";
   } else {
-    src = `${baseURL}${src}`;
+    if (!src.includes("https")) {
+      src = `${baseURL}${src}`;
+    }
   }
 
   return (
@@ -35,7 +37,7 @@ const Cast: React.FC<{
         />
         <div className="flex flex-col gap-2">
           <span className="font-bold">{name}</span>
-          <span className="text-sm text-muted-foreground">{job}</span>
+          {job && <span className="text-sm text-muted-foreground">{job}</span>}
         </div>
       </div>
     </div>

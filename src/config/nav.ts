@@ -22,7 +22,7 @@ export const navItems = [
     icon: ClapperboardIcon,
   },
   {
-    label: "Actors",
+    label: "People",
     href: "/actors",
     icon: UsersRoundIcon,
   },
