@@ -15,6 +15,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { Sider } from "~/components/sider";
+import { Toaster } from "~/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "KDramaDB",
@@ -33,6 +34,7 @@ export default function RootLayout({
             <NextTopLoader color="#fff" showSpinner={false} />
             <Sider />
             <main className="flex-grow">{children}</main>
+            <Toaster />
           </NuqsAdapter>
         </TRPCReactProvider>
       </body>
