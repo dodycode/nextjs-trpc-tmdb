@@ -15,7 +15,7 @@ interface Props {
 // Todo: use infinite scroll for pagination
 const Actors: React.FC<Props> = ({ initialData }) => {
   const [page, setPage] = useState(1);
-  const [actorsData, setActorsData] = useState(
+  const [actorsData, setActorsData] = useState<RouterOutputs["tmdb"]["people"]>(
     initialData.filter(
       (actor) => actor.name !== "" && actor.nationality === "South Korean",
     ),
