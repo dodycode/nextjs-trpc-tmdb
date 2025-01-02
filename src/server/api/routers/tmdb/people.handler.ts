@@ -10,7 +10,7 @@ export const peopleHandler = publicProcedure
   .query(async ({ input }) => {
     const page = input?.cursor ?? 1;
 
-    // fetch mydramalist page for get popular people
+    // fetch mydramalist page to get popular people
     const resp = await fetch(`https://mydramalist.com/people/top?page=${page}`);
 
     // get the html into a string
