@@ -11,6 +11,7 @@ import {
   XIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  FilterIcon,
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 
@@ -28,6 +29,7 @@ const icons = {
   close: XIcon,
   arrowLeft: ArrowLeftIcon,
   arrowRight: ArrowRightIcon,
+  filter: FilterIcon,
 } as const;
 
 export type IconType = keyof typeof icons;
