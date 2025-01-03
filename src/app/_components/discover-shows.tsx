@@ -12,7 +12,7 @@ const DiscoverShows: React.FC = () => {
   if (!movies) return null;
 
   return (
-    <div className="grid grid-cols-2 items-stretch gap-2 md:grid-cols-4 lg:grid-cols-7">
+    <div className="grid grid-cols-3 items-stretch gap-x-2 gap-y-3 md:grid-cols-4 lg:grid-cols-7">
       {movies?.pages.map((page) => (
         <Fragment key={page.page}>
           {page.results.map((show) => (
@@ -27,7 +27,7 @@ const DiscoverShows: React.FC = () => {
       ))}
       {isLoading && (
         <>
-          <Skeleton className="h-[250px] w-full lg:h-[280px]" />
+          <Skeleton className="h-[150px] w-full lg:h-[280px]" />
         </>
       )}
     </div>

@@ -30,7 +30,7 @@ export default async function KSeries({
 
   return (
     <HydrateClient>
-      <Container className="flex flex-col gap-14 py-8">
+      <Container className="flex flex-col gap-6 py-8 lg:gap-14">
         <SearchInput />
         <div className="flex flex-col gap-6">
           <PageHeader title="K-Series">
